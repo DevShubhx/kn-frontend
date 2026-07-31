@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* === EAGLE FONT === */
+@font-face {
+  font-family: 'Eagle';
+  src: url('./assets/fonts/Eagle-Book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Eagle';
+  src: url('./assets/fonts/Eagle-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* === CARTOON FONT === */
+@font-face {
+  font-family: 'Cartoon';
+  src: url('./assets/fonts/Cartoon_Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cartoon';
+  src: url('./assets/fonts/Cartoon-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* === POWERHOUSE FONT === */
+
+@font-face {
+  font-family: 'Powerhouse';
+  src: url('./assets/fonts/Powerhouse-Era.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* === STERLING FONT === */
+@font-face {
+  font-family: 'Sterling';
+  src: url('./assets/fonts/Sterling-Bold.otf') format('opentype'); /* 🌟 OTF फ़ाइल के लिए opentype फॉर्मेट फिक्स */
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* ==========================================================================
+   🎨 Official Tailwind v4 Custom Utility Classes (No Warnings)
+   ========================================================================== */
+
+@utility font-eagle {
+  font-family: 'Eagle', 'sans-serif';
+}
+
+@utility font-cartoon {
+  font-family: 'Cartoon', 'sans-serif';
+}
+
+@utility font-powerhouse {
+  font-family: 'Powerhouse', 'sans-serif';
+}
+
+@utility font-sterling {
+  font-family: 'Sterling', 'sans-serif';
+}
+
+/* Safe fallback rules to guarantee center alignment */
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #6699cc;
+}
