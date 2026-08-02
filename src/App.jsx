@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Welcome from './pages/Welcome'
-import Schedule from './pages/Schedule'
+import Schedule from './pages/WeeklySchedule'
 import Catalog from './pages/Catalog'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -14,7 +14,9 @@ import ForgotPassword from './pages/ForgotPassword';
 // src/App.jsx के बिल्कुल शीर्ष पर अन्य इम्पोर्ट्स के साथ इसे जोड़ें:
 import CartoonTheatre from './pages/CartoonTheatre'; // 🔒 सुनिश्चित करें कि फ़ाइल का पाथ बिल्कुल सही है
 import Ppick from './pages/Ppick';
-import NewShows from './pages/NewShows'; 
+import NewShows from './pages/NewShows';
+import WeeklySchedule from './pages/WeeklySchedule';
+
 
 
 
@@ -44,6 +46,8 @@ function App() {
 
         <Route path="/new-shows" element={<NewShows />} />
 
+        <Route path="/weekly-schedule" element={<WeeklySchedule />} />
+
 
         {/* Secret Admin Login Path */}
         <Route path="/secret-admin-entrance-99" element={<AdminDashboard />} />
@@ -56,6 +60,8 @@ function App() {
         <Route path="/genre/:genreName" element={<GenreCatalog />} />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+
 
         {/* Fall Back to Home */}
         <Route path="*" element={<Welcome />} />

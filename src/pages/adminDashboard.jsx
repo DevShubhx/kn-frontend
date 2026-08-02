@@ -703,8 +703,75 @@ export default function AdminDashboard() {
                 🔥 PURGE CARD FROM CLUSTER
               </button>
             </div>
-
           </div>
+        </div>
+        
+        {/* CONTAINER 7: HIGH-VELOCITY BLOCK INTEGRATED WEEKLY SCHEDULE FORM */}
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl mt-8 text-left">
+          <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-3">
+            <span className="text-xl">📺</span>
+            <h2 className="text-sm font-black text-white uppercase tracking-wider">Action 7: 7-Day Timetable Core Controller</h2>
+          </div>
+
+          <form 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const payload = {
+                showName: document.getElementById('week-show').value.trim(),
+                programmingBlock: document.getElementById('week-block').value.trim(), // Toonami, Power Zone etc.
+                startTime: document.getElementById('week-start').value,
+                durationInMinutes: parseInt(document.getElementById('week-duration').value, 10)
+              };
+              const token = localStorage.getItem('token');
+              
+              const res = await fetch('http://localhost:5000/api/weekly-schedule/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+              });
+              if(res.ok) { 
+                alert('Slot Successfully Logged into 7-Day Grid Matrix!'); 
+                document.getElementById('week-show').value = '';
+                document.getElementById('week-start').value = '';
+              } else { 
+                alert('Transaction aborted by gatekeepers.'); 
+              }
+            }} 
+            className="flex flex-col gap-4"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Cartoon Show Name</label>
+                <input type="text" id="week-show" required placeholder="e.g. Tom and Jerry Show" className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-red-600" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Programming Block Name (Optional)</label>
+                <input type="text" id="week-block" placeholder="e.g. Toonami, Power Zone, Tiny TV, Half Ticket Express" className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-red-600" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Broadcast Start Time (Local System Clock)</label>
+                <input type="datetime-local" id="week-start" required className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-red-600" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Show Duration (Minutes Block)</label>
+                <select id="week-duration" className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-red-600">
+                  <option value="30">30 Minutes Slot (Standard Slot)</option>
+                  <option value="60">60 Minutes Block</option>
+                  <option value="15">15 Minutes Tiny TV Slot</option>
+                  <option value="90">90 Minutes Feature Movie</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider p-3 rounded-lg transition shadow-lg mt-2">
+              🔒 LOCK SLOT INTO 7-DAY MATRIX
+            </button>
+          </form>
         </div>
 
 
