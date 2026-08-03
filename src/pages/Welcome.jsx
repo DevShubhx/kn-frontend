@@ -25,7 +25,7 @@ function Welcome() {
         { id: 2, img: "src/assets/images/b2.png",  buttonLabel: "CN Theatre", linkTo: "/theatre" },
         { id: 3, img: "src/assets/images/b3.png",  buttonLabel: "New Show", linkTo: "/new-shows" },
         { id: 4, img: "src/assets/images/b4.png",  buttonLabel: ".ComPick", linkTo: "/compick" },
-        { id: 5, img: "src/assets/images/b5.png",  buttonLabel: "Schedule", linkTo: "" }
+        { id: 5, img: "src/assets/images/b5.png",  buttonLabel: "Schedule", linkTo: "/weekly-schedule" }
     ], []);
 
 

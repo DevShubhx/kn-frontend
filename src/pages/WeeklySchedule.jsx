@@ -9,7 +9,7 @@ const CONFIG = {
 export default function Schedule() {
   const [timeline, setTimeline] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   // 🎯 SELECTED DAY TIMELINE STATE: डिफ़ॉल्ट रूप से आज की तारीख सिलेक्ट रहेगी
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
@@ -37,7 +37,7 @@ export default function Schedule() {
   const sevenDaysTabs = useMemo(() => {
     const tabs = [];
     const baseDate = timeline?.serverTimeMs ? new Date(timeline.serverTimeMs) : new Date();
-    
+
     for (let i = 0; i < 7; i++) {
       const d = new Date(baseDate.getTime() + (i * 24 * 60 * 60 * 1000));
       tabs.push({
@@ -62,33 +62,32 @@ export default function Schedule() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#1d71cb] text-white">
-        <h2 className="text-xl font-black uppercase tracking-widest animate-pulse font-mono">⏳ LOAD VINTAGE 2005 MATRIX...</h2>
+        <h2 className="text-xl font-black uppercase tracking-widest animate-pulse font-mono">⏳ LOADING...</h2>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#1d71cb] min-h-screen w-full flex flex-col items-center justify-start py-8 px-4 select-none text-white font-sans overflow-x-hidden">
-      
+    <div className="min-h-screen h-auto w-full flex flex-col items-center justify-start py-8 px-4 select-none text-white font-sans bg-[linear-gradient(to_bottom,#ffdb0e_35%,#fbd787_50%,#ff1403_60%,#1f4037_100%)] bg-scroll">
+
       {/* 🎪 TITLE ENGINE BLOCK */}
-      <div className="text-center mb-6 max-w-xl w-full">
-        <h1 className="text-2xl sm:text-4xl font-black uppercase text-[#fff200] tracking-wider border-6 border-black bg-black px-8 py-3 shadow-[12px_12px_0px_#000000] font-mono">
-          📺 CARTOON NETWORK FEED
-        </h1>
+      <div className="text-center mb-2 max-w-190 w-full">
+        <img src="src/assets/images/schdul-banner.png"
+          alt="schedule-banner"
+          className="w-full h-auto" />
       </div>
 
       {/* 🎪 FIRST COMPONENT: DYNAMIC HORIZONTAL 7-DAYS DATE BAR MODULE */}
       {/* यह आपकी भेजी गई विंटेज इमेज के रेड हेडर रो को एक 100% कड़क रिस्पॉन्सिव क्लिकेबल ग्रिड में बदल देता है */}
-      <div className="w-full max-w-4xl bg-[#800000] border-6 border-black shadow-[12px_12px_0px_#000000] mb-8 grid grid-cols-4 sm:grid-cols-7 divide-x-2 sm:divide-x-4 divide-black border-collapse">
+      <div className="w-full max-w-4xl bg-[#800000] border-4 border-black mb-2 grid grid-cols-4 sm:grid-cols-7 divide-x-2 sm:divide-x-4 divide-black border-collapse">
         {sevenDaysTabs.map((tab, idx) => (
           <button
             key={idx}
             onClick={() => setSelectedDayIndex(idx)}
-            className={`p-3 flex flex-col items-center justify-center transition-all duration-150 cursor-pointer ${
-              selectedDayIndex === idx 
-                ? 'bg-[#fff200] text-black font-black scale-102 z-10 border-2 border-black' 
-                : 'bg-[#800000] text-slate-200 hover:bg-[#a00000]'
-            }`}
+            className={`p-3 flex flex-col items-center justify-center transition-all duration-150 cursor-pointer ${selectedDayIndex === idx
+              ? 'bg-[#fff200] text-black font-black scale-102 z-10 border-2 rounded-2xl border-black'
+              : 'bg-[#800000] text-slate-200 hover:bg-[#a00000]'
+              }`}
           >
             <span className="text-[10px] font-black tracking-widest">{tab.dayName}</span>
             <span className="text-sm font-black mt-0.5 font-mono">{tab.dateLabel}</span>
@@ -97,8 +96,8 @@ export default function Schedule() {
       </div>
 
       {/* 🎪 SECOND COMPONENT: THE VINTAGE 2005 CABLE GRID GUIDE LAYOUT */}
-      <div className="w-full max-w-4xl bg-white text-black border-6 border-black shadow-[12px_12px_0px_#000000] overflow-hidden">
-        
+      <div className="w-full max-w-4xl bg-white text-black border-6 border-black overflow-hidden">
+
         {/* GUIDES STATIC LABELS SLEEVE */}
         <div className="w-full bg-black text-[#fff200] grid grid-cols-4 p-3 font-black text-xs uppercase tracking-wider font-mono border-b-6 border-black text-left">
           <div className="pl-2">TIME</div>
