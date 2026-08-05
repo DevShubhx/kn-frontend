@@ -1,6 +1,8 @@
 // src/pages/NewShows.jsx - Complete Ultimate Edition
 import React, { useEffect, useState, useCallback } from 'react';
-import HeaderBannerImage from '../assets/images/header_01.png'; // 🔒 सुरक्षित लोकल हेडर इमेज
+import HeaderBannerImage from '../assets/images/header_01.png'; // 🔒 सुरक्षित लोकल हेडर 
+import { Link } from 'react-router-dom';
+
 
 const CONFIG = { BACKEND_BASE_URL: 'http://localhost:5000' };
 
@@ -39,11 +41,16 @@ export default function NewShows() {
       <div className="w-auto bg-[#ff5952] overflow-hidden mt-2">
         <img src={HeaderBannerImage} alt="New Shows Broadcast Banner" className="w-3xl h-auto block pointer-events-none object-contain" />
 
-        <div className="w-35 max-w-xs md:w-40 md:absolute md:right-71 md:top-1 shrink-0 p-4 flex flex-col items-center justify-center z-30 mx-auto mt-1 md:mt-0">
-          <img src="/src/assets/images/scdul_btn.png"
+        <Link
+          to="/weekly-schedule"
+          className="w-35 max-w-xs md:w-40 md:absolute md:right-71 md:top-1 shrink-0 p-4 flex flex-col items-center justify-center z-30 mx-auto mt-1 md:mt-0 cursor-pointer transition-transform transform hover:scale-[1.03] active:scale-95 group"
+        >
+          <img
+            src="/src/assets/images/scdul_btn.png"
             alt="Schedule_Btn"
-            className="w-full h-auto pointer-events-auto object-contain" />
-        </div>
+            className="w-full h-auto pointer-events-auto object-contain drop-shadow-[4px_4px_0px_rgba(0,0,0,0.4)] group-hover:drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)] transition-all"
+          />
+        </Link>
       </div>
 
       {/* 🎪 SECOND COMPONENT: HIGH-ACCURACY ASYMMETRIC CARDS GRID */}
@@ -53,24 +60,24 @@ export default function NewShows() {
 
             {/* 🎯 1. CARD HEADER BAR: Left text with optional left side icon image */}
             <div className="w-full flex items-center gap-2 border-b-2 border-black pb-1 mb-2 relative">
-  {card.headerIconUrl && (
-    <img 
-      src={card.headerIconUrl} 
-      alt="icon" 
-      // 🔒 LOCKED POP-OUT LOGIC:
-      // -absolute: इमेज को बार के फ्लो से बाहर निकालकर स्वतंत्र लेयर बनाना।
-      // --left-2.5 -top-3: इमेज को कड़ाई से 8-10 पिक्सल बाईं और ऊपर की ओर बाहर धकेलना (Pop-out)।
-      // -bg-transparent: बॉक्स को अदृश्य रखना ताकि केवल असली कैरेक्टर / आइकॉन ही बाहर दिखे।
-      // -drop-shadow: 3D पॉप प्रभाव को और कड़क बनाने के लिए हल्का रेट्रो शैडो।
-      className="absolute -left-2.5 -top-6 w-24 h-16 object-contain pointer-events-none shrink-0 bg-transparent z-40 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]" 
-    />
-  )}
-  {/* 🎯 TEXT OFFSET ACCURACY: 
+              {card.headerIconUrl && (
+                <img
+                  src={card.headerIconUrl}
+                  alt="icon"
+                  // 🔒 LOCKED POP-OUT LOGIC:
+                  // -absolute: इमेज को बार के फ्लो से बाहर निकालकर स्वतंत्र लेयर बनाना।
+                  // --left-2.5 -top-3: इमेज को कड़ाई से 8-10 पिक्सल बाईं और ऊपर की ओर बाहर धकेलना (Pop-out)।
+                  // -bg-transparent: बॉक्स को अदृश्य रखना ताकि केवल असली कैरेक्टर / आइकॉन ही बाहर दिखे।
+                  // -drop-shadow: 3D पॉप प्रभाव को और कड़क बनाने के लिए हल्का रेट्रो शैडो।
+                  className="absolute -left-2.5 -top-6 w-24 h-16 object-contain pointer-events-none shrink-0 bg-transparent z-40 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]"
+                />
+              )}
+              {/* 🎯 TEXT OFFSET ACCURACY: 
       -pl-14 यह पक्का करता है कि जब आइकॉन बाईं ओर पॉप-आउट हो, तो टेक्स्ट और इमेज आपस में कभी क्लैश न हों */}
-  <h2 className={`text-lg uppercase font-powerhouse font-bold truncate ${card.headerIconUrl ? 'pl-24' : 'pl-0'}`}>
-    {card.headerText}
-  </h2>
-</div>
+              <h2 className={`text-lg uppercase font-powerhouse font-bold truncate ${card.headerIconUrl ? 'pl-24' : 'pl-0'}`}>
+                {card.headerText}
+              </h2>
+            </div>
 
             {/* 🎯 2. CARD BODY LAYOUT: Description with a small 1:1 image at top right corner */}
             <div className="w-full flex flex-row justify-between items-start gap-2">

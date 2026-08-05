@@ -68,7 +68,7 @@ export default function Schedule() {
   }
 
   return (
-    <div className="min-h-screen h-auto w-full flex flex-col items-center justify-start py-8 px-4 select-none text-white font-sans bg-[linear-gradient(to_bottom,#ffdb0e_35%,#fbd787_50%,#ff1403_60%,#1f4037_100%)] bg-scroll">
+    <div className="min-h-screen h-auto w-full flex flex-col items-center justify-start py-8 px-4 select-none text-white font-sans bg-[linear-gradient(to_bottom,#ffdb0e_25%,#ff1403_60%,#165eac_75%,#000000_85%)] bg-scroll">
 
       {/* 🎪 TITLE ENGINE BLOCK */}
       <div className="text-center mb-2 max-w-190 w-full">
@@ -79,29 +79,29 @@ export default function Schedule() {
 
       {/* 🎪 FIRST COMPONENT: DYNAMIC HORIZONTAL 7-DAYS DATE BAR MODULE */}
       {/* यह आपकी भेजी गई विंटेज इमेज के रेड हेडर रो को एक 100% कड़क रिस्पॉन्सिव क्लिकेबल ग्रिड में बदल देता है */}
-      <div className="w-full max-w-4xl bg-[#800000] border-4 border-black mb-2 grid grid-cols-4 sm:grid-cols-7 divide-x-2 sm:divide-x-4 divide-black border-collapse">
+      <div className="w-full max-w-4xl bg-[#800000] border-4 border-black rounded-t-xl mb-1 grid grid-cols-4 sm:grid-cols-7 divide-x-2 sm:divide-x-4 divide-black border-collapse">
         {sevenDaysTabs.map((tab, idx) => (
           <button
             key={idx}
             onClick={() => setSelectedDayIndex(idx)}
             className={`p-3 flex flex-col items-center justify-center transition-all duration-150 cursor-pointer ${selectedDayIndex === idx
-              ? 'bg-[#fff200] text-black font-black scale-102 z-10 border-2 rounded-2xl border-black'
-              : 'bg-[#800000] text-slate-200 hover:bg-[#a00000]'
+              ? 'bg-[#fff200] text-black font-black scale-102 z-10 border-4 rounded-2xl border-black'
+              : 'bg-[#800000] text-slate-200 hover:bg-[#954535] hover:text-[#ffbf00]'
               }`}
           >
-            <span className="text-[10px] font-black tracking-widest">{tab.dayName}</span>
+            <span className="text-[16px] font-black tracking-widest">{tab.dayName}</span>
             <span className="text-sm font-black mt-0.5 font-mono">{tab.dateLabel}</span>
           </button>
         ))}
       </div>
 
       {/* 🎪 SECOND COMPONENT: THE VINTAGE 2005 CABLE GRID GUIDE LAYOUT */}
-      <div className="w-full max-w-4xl bg-white text-black border-6 border-black overflow-hidden">
+      <div className="w-full max-w-4xl bg-[#cfcfc4] text-black border-6 border-black overflow-hidden">
 
         {/* GUIDES STATIC LABELS SLEEVE */}
         <div className="w-full bg-black text-[#fff200] grid grid-cols-4 p-3 font-black text-xs uppercase tracking-wider font-mono border-b-6 border-black text-left">
           <div className="pl-2">TIME</div>
-          <div className="col-span-2">CARTOON BROADCAST LIST</div>
+          <div className="col-span-2">SHOW</div>
           <div className="text-center">DURATION</div>
         </div>
 
@@ -119,8 +119,8 @@ export default function Schedule() {
               <React.Fragment key={slot._id}>
                 {/* 🎪 TOONAMI / HALF TICKET EXPRESS INTERFACE INSERTION CONTAINER */}
                 {showBlockHeader && (
-                  <div className="w-full bg-[#94a3b8]/30 text-black border-y-4 border-black py-2.5 font-black text-sm tracking-widest uppercase font-serif text-center bg-linear-to-r from-slate-200 via-slate-300 to-slate-200 [text-shadow:1px_1px_0px_rgba(255,255,255,0.8)]">
-                    🎬 {slot.programmingBlock} 🎬
+                  <div className="w-full bg-[#94a3b8]/30 text-black border-y-4 border-black py-2.5 font-black text-md tracking-widest uppercase font-powerhouse text-center bg-linear-to-r from-slate-200 via-slate-300 to-slate-200 [text-shadow:1px_1px_0px_rgba(255,255,255,0.8)]">
+                    {slot.programmingBlock}
                   </div>
                 )}
 
@@ -133,7 +133,7 @@ export default function Schedule() {
 
                   {/* Cartoon Show Name (Center Block) */}
                   <div className="col-span-2 flex flex-col justify-center">
-                    <h4 className={`text-sm sm:text-base font-black uppercase truncate tracking-tight ${isRowLive ? 'text-green-700' : 'text-black'}`}>
+                    <h4 className={`text-sm sm:text-base font-black font-sterling uppercase truncate tracking-tight ${isRowLive ? 'text-green-700' : 'text-black'}`}>
                       {slot.showName}
                     </h4>
                   </div>
