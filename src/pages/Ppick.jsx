@@ -91,12 +91,12 @@ export default function InteractiveGallery() {
         {/* ---------------------------------------------------------------------- */}
         <div className="hidden md:block">
           {/* IMAGE TWO (img-2) - बेस एसेट लेयर (z-10) */}
-          <div className="absolute w-180 align-top z-10">
+          <div className="absolute w-200 align-top z-10">
             <img src={ImageTwo} alt="Grid Beta Desktop" className="w-full h-auto block pointer-events-none" />
           </div>
 
           {/* IMAGE ONE (img-1) - ओवरले फ्लोटिंग लेयर (z-20) */}
-          <div className="absolute left-[37%] top-39 w-120 z-20">
+          <div className="absolute left-[37%] top-39 w-140 z-20">
             <img src={ImageOne} alt="Grid Alpha Desktop" className="w-full h-auto block pointer-events-none" />
             
             {/* 🎯 DESKTOP FLOATING POLL OVERLAY MATRIX: इमेज के ठीक ऊपर एम्बेड किया गया कड़क पोलिंग बॉक्स */}
@@ -108,7 +108,7 @@ export default function InteractiveGallery() {
               <form onSubmit={handleVoteSubmit} className="w-full flex flex-col">
                 {pollData?.options?.map((opt) => (
                   <div key={opt._id} className="flex flex-col w-full p-1">
-                    <label className="flex items-center ml-18 gap-3 cursor-pointer text-[16px] font-bold uppercase text-white">
+                    <label className="flex items-center ml-24 gap-3 cursor-pointer text-[16px] font-bold uppercase text-white">
                       <input 
                         type="radio" 
                         name="desktop-poll-show"
@@ -122,7 +122,7 @@ export default function InteractiveGallery() {
                     </label>
                     
                     {/* 📊 HORIZONTAL PROGRESS BAR MATRIX (नंबर छिपे रहेंगे) */}
-                    <div className="w-65 ml-18 bg-white h-3 mt-1.5 border border-black overflow-hidden relative">
+                    <div className="w-65 ml-24 bg-white h-3 mt-1.5 border border-black overflow-hidden relative">
                       <div 
                         // 🔒 HIGHLIGHT LOGIC: सबसे ज्यादा वोट वाले शो का बार चमकदार हरे (bg-green-500) में बदल जाएगा
                         className={`h-full transition-all duration-1000 ${opt.voteStatus === 'winner' ? 'bg-green-500' : 'bg-red-700'}`}
@@ -133,7 +133,7 @@ export default function InteractiveGallery() {
                 ))}
 
                 {!hasVoted && (
-                  <button type="submit" className="w-50 ml-25 bg-[#ff91ed] text-black font-powerhouse font-bold text-[20px] tracking-widest uppercase p-2 border-4 border-black rounded-3xl mt-9 hover:bg-fuchsia-500 cursor-pointer ">
+                  <button type="submit" className="w-50 ml-38 bg-[#ff91ed] text-black font-powerhouse font-bold text-[20px] tracking-widest uppercase p-2 border-4 border-black rounded-3xl mt-9 hover:bg-fuchsia-500 cursor-pointer ">
                     SUBMIT VOTE
                   </button>
                 )}
