@@ -5,7 +5,7 @@ import Schedule from './pages/WeeklySchedule'
 import Catalog from './pages/Catalog'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import AdminDashboard from './pages/AdminDashboard'
+import AdminDashboard from './pages/adminDashboard'
 import ShowPage from './pages/ShowPage'
 import WatchPage from './pages/WatchPage';
 import GenreCatalog from './pages/GenreCatalog';
