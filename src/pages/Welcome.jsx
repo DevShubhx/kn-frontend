@@ -21,7 +21,7 @@ function Welcome() {
 
     // 📸 5 इमेज कार्ड्स का डेटा (Public फोल्डर का सीधा रास्ता)
     const CARDS_DATA = useMemo(() => [
-        { id: 1, img: "src/assets/images/b1.png",  buttonLabel: "Home", linkTo: "/genre/Boomerang" },
+        { id: 1, img: "src/assets/images/b_1.svg",  buttonLabel: "Home", linkTo: "/genre/Boomerang" },
         { id: 2, img: "src/assets/images/b2.png",  buttonLabel: "CN Theatre", linkTo: "/theatre" },
         { id: 3, img: "src/assets/images/b3.png",  buttonLabel: "New Show", linkTo: "/new-shows" },
         { id: 4, img: "src/assets/images/b4.png",  buttonLabel: ".ComPick", linkTo: "/compick" },
@@ -29,13 +29,13 @@ function Welcome() {
     ], []);
 
 
-    // 🔄 कैरोसेल ऑटो-प्ले स्लाइडिंग इंजन लॉजिक (3 सेकंड अंतराल)
+    // 🔄 कैरोसेल ऑटो-प्ले स्लाइडिंग इंजन लॉजिक (5 सेकंड अंतराल)
     useEffect(() => {
         const startCarousel = () => {
             if (carouselTimerRef.current) clearInterval(carouselTimerRef.current);
             carouselTimerRef.current = setInterval(() => {
                 setCarouselIndex((prev) => (prev + 1) % CARDS_DATA.length);
-            }, 3000);
+            }, 5000);
         };
 
         startCarousel();
@@ -318,29 +318,37 @@ function Welcome() {
                     </div>
 
                     {/* 🎞️ SLIDING VIEWPORT (इल्यूजन बॉक्स जो राइट-टू-लेफ्ट खिसकेगा) */}
-                    <div className="w-175 h-100 rounded-2xl overflow-hidden relative border-slate-900 mb-2">
-                        <div
-                            className="flex w-full h-full transition-transform duration-500 ease-out"
-                            style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
-                        >
-                            {CARDS_DATA.map((card) => (
-                                <div key={card.id}
-                                                  onClick={() => navigate(card.linkTo)}
-                                                 className="w-full h-100 shrink-0 relative group select-none cursor-pointer">
-                                    <img
-                                        src={card.img}
-                                        alt={card.title}
-                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-100"
-                                        loading="lazy"
-                                    />
-                                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-wide drop-shadow-md">
-                                        {card.title}
-                                    </h2>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
+                   <div className="w-full aspect-video md:w-175 md:h-100 mx-auto rounded-xl overflow-hidden relative">
+    <div
+        className="flex w-full h-full transition-transform duration-500 ease-out"
+        style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+    >
+        {CARDS_DATA.map((card) => (
+            <div 
+                key={card.id}
+                onClick={() => navigate(card.linkTo)}
+                // 🎯 FIXED child wrapper dimensions:
+                // यहाँ भी w-full h-full को पूरी तरह स्वतंत्र रखा गया है ताकि पैरेंट का स्ट्रेच मोशन सीमलेस ट्रांसफर हो सके
+                className="w-full h-full shrink-0 relative group select-none cursor-pointer"
+            >
+                <img
+                    src={card.img}
+                    alt={card.title}
+                    // object-cover और h-full यह पक्का करेगा कि इमेज कभी भी चपटी (warp) या कटी हुई न दिखे
+                    className="w-full h-full object-cover transition-transform duration-1000 pointer-events-none"
+                    loading="lazy"
+                />
+                
+                {/* विंटेज स्टूडियो टाइटल ओवरले (यदि आपके लेआउट में एम्बेडेड है) */}
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/20 to-transparent p-4 flex items-end justify-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h2 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide drop-shadow-[2px_2px_0px_#000]">
+                        {card.title}
+                    </h2>
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
                     <button
                         onClick={() => navigate('/catalog')}
                         className="py-3 px-8 sm:py-4 sm:px-12 font-eagle font-bold text-base sm:text-lg text-white bg-red-600 rounded-full shadow-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-orange-500 active:scale-95"
@@ -357,11 +365,11 @@ function Welcome() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center items-center">
                     {[
                         { name: 'TOONAMI', tag: 'TOONAMI', image: 'https://unsplash.com', desc: 'Saturdays - Sundays at 8 PM' },
-                        { name: 'Boomerang', tag: 'Boomerang', image: 'https://unsplash.com', desc: 'Old school cartoon network favorites' },
+                        { name: 'Tiny TV', tag: 'Tiny TV', image: 'https://unsplash.com', desc: 'Old school cartoon network favorites' },
                         { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'https://unsplash.com', desc: 'High energy superhero adventures' },
                         { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'https://unsplash.com', desc: 'Futuristic worlds and space chronicles' },
                         { name: 'Power Zone', tag: 'Power Zone', image: 'https://unsplash.com', desc: 'Spooky and terrifying horror tales' },
-                        { name: 'Comedy', tag: 'Comedy', image: 'https://unsplash.com', desc: 'Laugh out loud ultimate comedy' }
+                        { name: 'Boomerang', tag: 'Boomerang', image: 'https://unsplash.com', desc: 'Laugh out loud ultimate comedy' }
                     ].map((group) => (
                         <div
                             key={group.tag}
