@@ -85,7 +85,7 @@ function Login() {
                     {/* Left CD Lights Graphic Accent */}
                     <div>
                         <img 
-                            src="src/assets/images/cd_lights.gif" 
+                            src="/assets/images/cd_lights.gif" 
                             alt="light-img"
                             className="min-h-11 w-4 mr-3 mt-10" 
                         />
@@ -177,7 +177,7 @@ function Login() {
                     {/* Right CD Lights Graphic Accent */}
                     <div>
                         <img 
-                            src="src/assets/images/cd_lights.gif" 
+                            src="/assets/images/cd_lights.gif" 
                             alt="light-img"
                             className="min-h-11 w-4 m-2 mt-40" 
                         />

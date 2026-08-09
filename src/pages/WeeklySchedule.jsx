@@ -72,7 +72,7 @@ export default function Schedule() {
 
       {/* 🎪 TITLE ENGINE BLOCK */}
       <div className="text-center mb-2 max-w-190 w-full">
-        <img src="src/assets/images/schdul-banner.png"
+        <img src="/assets/images/schdul-banner.png"
           alt="schedule-banner"
           className="w-full h-auto" />
       </div>

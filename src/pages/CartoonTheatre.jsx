@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 // 🔒 SECURE LOCAL ASSET INTEGRATION
-import TheatreLogoImage from '/src/assets/images/cn_theatre_top.svg';
+import TheatreLogoImage from '/assets/images/cn_theatre_top.svg';
 
 const CONFIG = {
   BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com',

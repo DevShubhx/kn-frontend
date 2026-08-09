@@ -98,7 +98,7 @@ function ForgotPassword() {
                 {/* 🐕 COURAGE THE COWARDLY DOG IMAGE OVER THE BOX */}
                 <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-65 sm:w-75 h-auto z-30 pointer-events-none">
                     <img 
-                        src="/src/assets/images/courage-pc.png" 
+                        src="/assets/images/courage-pc.png" 
                         alt="Courage PC" 
                         className="w-full h-auto object-contain drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]"
                     />

@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 // 🔒 SECURE LOCAL ASSET INTEGRATION (No External Injection Hooks)
-import ImageOne from '../assets/images/compick.svg';
-import ImageTwo from '../assets/images/pp.svg';
+import ImageOne from '/assets/images/compick.svg';
+import ImageTwo from '/assets/images/pp.svg';
 
 const CONFIG = {
   BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com'

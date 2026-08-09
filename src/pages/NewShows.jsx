@@ -1,6 +1,6 @@
 // src/pages/NewShows.jsx - Complete Ultimate Edition
 import React, { useEffect, useState, useCallback } from 'react';
-import HeaderBannerImage from '../assets/images/header_01.png'; // 🔒 सुरक्षित लोकल हेडर 
+import HeaderBannerImage from '/assets/images/header_01.png'; // 🔒 सुरक्षित लोकल हेडर 
 import { Link } from 'react-router-dom';
 
 
@@ -46,7 +46,7 @@ export default function NewShows() {
           className="w-35 max-w-xs md:w-40 md:absolute md:right-71 md:top-1 shrink-0 p-4 flex flex-col items-center justify-center z-30 mx-auto mt-1 md:mt-0 cursor-pointer transition-transform transform hover:scale-[1.03] active:scale-95 group"
         >
           <img
-            src="/src/assets/images/scdul_btn.png"
+            src="/assets/images/scdul_btn.png"
             alt="Schedule_Btn"
             className="w-full h-auto pointer-events-auto object-contain drop-shadow-[4px_4px_0px_rgba(0,0,0,0.4)] group-hover:drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)] transition-all"
           />
@@ -107,7 +107,7 @@ export default function NewShows() {
 
       <div className="w-full max-w-xs md:w-80 md:absolute md:right-2 md:top-28 shrink-0 p-4 flex flex-col items-center justify-center z-10 mx-auto mt-10 md:mt-0">
         <img
-          src="/src/assets/images/sd_gang.svg"
+          src="/assets/images/sd_gang.svg"
           alt="Cartoon Network SD Gang Asset"
           className="w-full h-auto block pointer-events-none object-contain"
         />

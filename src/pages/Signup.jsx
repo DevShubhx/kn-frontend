@@ -78,7 +78,7 @@ function Signup() {
                 {/* 📺 LEFT SIDE: DEXTER IMAGE & TEXT */}
                 <div className="w-full md:w-[45%] max-w-sm md:max-w-md flex flex-col items-center justify-center shrink-0 text-center">
                     <img 
-                        src={'/src/assets/images/rege-dexter.png'} // 👈 अपनी इमेज को public फोल्डर में 'reg-dexter.png' नाम से रखें
+                        src={'/assets/images/rege-dexter.png'} // 👈 अपनी इमेज को public फोल्डर में 'reg-dexter.png' नाम से रखें
                         alt="Dexter Register" 
                         className="w-full max-w-70 sm:max-w-85 h-auto object-contain drop-shadow-[5px_5px_0px_rgba(0,0,0,1)]"
                     />
