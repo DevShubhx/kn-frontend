@@ -79,7 +79,7 @@ function Welcome() {
 
         const fetchShows = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/shows')
+                const response = await fetch('https://kn-backend-e3sa.onrender.com/api/shows')
                 if (!response.ok) throw new Error('Failed to fetch entries.')
                 const data = await response.json()
                 setShows(data)
@@ -95,7 +95,7 @@ function Welcome() {
     useEffect(() => {
         const fetchLiveChannels = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/live-tv/live-timetable');
+                const response = await fetch('https://kn-backend-e3sa.onrender.com/api/live-tv/live-timetable');
                 if (response.ok) {
                     const data = await response.json();
                     setLiveSchedule(data.schedule);
@@ -188,7 +188,7 @@ function Welcome() {
                             if (isLoggedIn) {
                                 navigate('/Live');
                             } else {
-                                alert('⚠️ Access Denied! Please Login first to watch LIVE TV.');
+                                alert('⚠️ Access Denied! Please Login first to watch LIVE TV [Check Top Menu Bar].');
                             }
                         }}
                         className="w-full bg-black border-4 border-white rounded-none shadow-[6px_6px_0px_0px_rgba(220,38,38,1)] cursor-pointer hover:scale-[1.02] transition-transform duration-200 relative overflow-hidden flex flex-col justify-between min-h-320px font-eagle select-none"

@@ -6,7 +6,7 @@ import ImageOne from '../assets/images/compick.svg';
 import ImageTwo from '../assets/images/pp.svg';
 
 const CONFIG = {
-  BACKEND_BASE_URL: 'http://localhost:5000'
+  BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com'
 };
 
 export default function InteractiveGallery() {

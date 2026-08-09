@@ -28,7 +28,7 @@ function ForgotPassword() {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/users/forgot-password', {
+            const response = await fetch('https://kn-backend-e3sa.onrender.com/api/users/forgot-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
@@ -66,7 +66,7 @@ function ForgotPassword() {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/users/reset-password', {
+            const response = await fetch('https://kn-backend-e3sa.onrender.com/api/users/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, otp, newPassword }),

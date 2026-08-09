@@ -25,7 +25,7 @@ export default function ShowPage() {
         // 2. Fetch specific card collection item info profiles from MongoDB
         const fetchShowDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/shows/${id}`);
+                const response = await fetch(`https://kn-backend-e3sa.onrender.com/api/shows/${id}`);
                 if (!response.ok) {
                     throw new Error('This cartoon title could not be located.');
                 }
@@ -54,7 +54,7 @@ export default function ShowPage() {
             const token = localStorage.getItem('token');
             const savedUsername = localStorage.getItem('username') || 'You';
 
-            const response = await fetch(`http://localhost:5000/api/shows/${id}/comments`, {
+            const response = await fetch(`https://kn-backend-e3sa.onrender.com/api/shows/${id}/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

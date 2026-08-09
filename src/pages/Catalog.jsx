@@ -20,7 +20,7 @@ function Catalog() {
     const fetchAllDashboardData = async () => {
       try {
         // 1. Fetch live sorted content rows
-        const showsResponse = await fetch('http://localhost:5000/api/shows');
+        const showsResponse = await fetch('https://kn-backend-e3sa.onrender.com/api/shows');
         if (!showsResponse.ok) throw new Error(`Shows API returned error status: ${showsResponse.status}`);
         const showsData = await showsResponse.json();
 
@@ -34,7 +34,7 @@ function Catalog() {
         setShows(sortedShows);
 
         // 2. Fetch latest live manual site updates broadcast bulletins
-        const updatesResponse = await fetch('http://localhost:5000/api/updates');
+        const updatesResponse = await fetch('https://kn-backend-e3sa.onrender.com/api/updates');
         if (updatesResponse.ok) {
           const updatesData = await updatesResponse.json();
           setUpdates(updatesData);

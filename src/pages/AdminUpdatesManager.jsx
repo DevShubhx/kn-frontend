@@ -8,7 +8,7 @@ function AdminUpdatesManager() {
   // 🔄 Function to sync the active bulletins array from the database
   const fetchCurrentUpdates = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/updates');
+      const res = await fetch('https://kn-backend-e3sa.onrender.com/api/updates');
       if (res.ok) {
         const data = await res.json();
         setUpdatesList(data);
@@ -29,7 +29,7 @@ function AdminUpdatesManager() {
     if (!announcement.trim()) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/updates', {
+      const res = await fetch('https://kn-backend-e3sa.onrender.com/api/updates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: announcement })
@@ -54,7 +54,7 @@ function AdminUpdatesManager() {
     if (!window.confirm("Are you sure you want to permanently erase this announcement?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/updates/${id}`, {
+      const res = await fetch(`https://kn-backend-e3sa.onrender.com/api/updates/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}` // Passes your admin token verification headers safely

@@ -8,7 +8,7 @@ export default function AdminCommentModerator() {
   const fetchPendingComments = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/shows/admin/pending-comments', {
+      const res = await fetch('https://kn-backend-e3sa.onrender.com/api/shows/admin/pending-comments', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -27,7 +27,7 @@ export default function AdminCommentModerator() {
   const handleApprove = async (showId, commentId) => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/shows/${showId}/comments/${commentId}/approve`, {
+      const res = await fetch(`https://kn-backend-e3sa.onrender.com/api/shows/${showId}/comments/${commentId}/approve`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -48,7 +48,7 @@ export default function AdminCommentModerator() {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/shows/${showId}/comments/${commentId}/reply`, {
+      const res = await fetch(`https://kn-backend-e3sa.onrender.com/api/shows/${showId}/comments/${commentId}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

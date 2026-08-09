@@ -12,7 +12,7 @@ export default function AdminScreenBugControl() {
   // 1. डेटाबेस से वर्तमान सेटिंग्स लेकर आना और खाली होने पर सुरक्षित संभालना
   const fetchBugSettings = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/screen-bugs/live-settings');
+      const res = await fetch('https://kn-backend-e3sa.onrender.com/api/screen-bugs/live-settings');
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
@@ -41,7 +41,7 @@ export default function AdminScreenBugControl() {
     const draftImageValue = fieldsToUpdate.draftImage !== undefined ? fieldsToUpdate.draftImage : targetBug.draftImage;
 
     try {
-      await fetch('http://localhost:5000/api/screen-bugs/update-settings', {
+      await fetch('https://kn-backend-e3sa.onrender.com/api/screen-bugs/update-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -56,7 +56,7 @@ export default function AdminScreenBugControl() {
   // PUSH बटन पर क्लिक करने पर ड्राफ्ट पाथ को लाइव स्क्रीन पर ऑन-एयर करना
   const handlePushToAir = async (bugId) => {
     try {
-      const res = await fetch('http://localhost:5000/api/screen-bugs/push-live', {
+      const res = await fetch('https://kn-backend-e3sa.onrender.com/api/screen-bugs/push-live', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bugId })

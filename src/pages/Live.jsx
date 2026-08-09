@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const CONFIG = {
-  BACKEND_BASE_URL: 'http://localhost:5000',
+  BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com',
   POLL_INTERVAL_MS: 1000,
   REFRESH_INTERVAL_MS: 120000
 };

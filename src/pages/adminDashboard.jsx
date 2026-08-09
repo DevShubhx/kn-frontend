@@ -63,7 +63,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchCatalog = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/shows');
+        const response = await fetch('https://kn-backend-e3sa.onrender.com/api/shows');
         if (response.ok) {
           const data = await response.json();
           setGlobalShowsList(data);
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
       // Split the text string by commas and clean empty spacing fields
       const genreArray = genre.split(',').map(g => g.trim());
 
-      const response = await fetch('http://localhost:5000/api/shows/add', {
+      const response = await fetch('https://kn-backend-e3sa.onrender.com/api/shows/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
       const targetInstance = globalShowsList.find(s => s._id === selectedShowId);
 
       // Clean payload request sending the text tags to Route 4
-      const response = await fetch(`http://localhost:5000/api/shows/${selectedShowId}/add-episode`, {
+      const response = await fetch(`https://kn-backend-e3sa.onrender.com/api/shows/${selectedShowId}/add-episode`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await fetch('http://localhost:5000/api/live-tv/schedule', {
+      const response = await fetch('https://kn-backend-e3sa.onrender.com/api/live-tv/schedule', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
       const token = localStorage.getItem('token');
 
       // 🔒 CLEAN LOCALHOST ENDPOINT: एआई फ़िल्टर से पूरी तरह सुरक्षित शुद्ध पाथ
-      const runtimeTheatreUrl = 'http://localhost:5000/api/theatre/update-schedule';
+      const runtimeTheatreUrl = 'https://kn-backend-e3sa.onrender.com/api/theatre/update-schedule';
 
       const response = await fetch(runtimeTheatreUrl, {
         method: 'POST',
@@ -263,7 +263,7 @@ export default function AdminDashboard() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/poll/reset', {
+      const response = await fetch('https://kn-backend-e3sa.onrender.com/api/poll/reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -457,7 +457,7 @@ export default function AdminDashboard() {
             {/* Media Stream URL Input Block */}
             <div className="flex flex-col gap-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Direct Streaming URL (.mp4 source)</label>
-              <input type="text" value={streamUrl || 'https://player.kick.com/embed/kn-network?parent=localhost'} onChange={(e) => setStreamUrl(e.target.value)} required placeholder="https://f003.backblazeb2.com" className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-red-600" />
+              <input type="text" value={streamUrl || 'https://player.kick.com/embed/kn-network?parent=knfrontend.vercel.app'} onChange={(e) => setStreamUrl(e.target.value)} required placeholder="https://f003.backblazeb2.com" className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-red-600" />
             </div>
 
             {/* Time and Duration Sub Grid Matrix Container */}
@@ -661,7 +661,7 @@ export default function AdminDashboard() {
                     thumbnailUrl: document.getElementById('crud-thumb').value.trim()
                   };
                   const token = localStorage.getItem('token');
-                  const url = id ? `http://localhost:5000/api/new-shows/update/${id}` : 'http://localhost:5000/api/new-shows/add';
+                  const url = id ? `https://kn-backend-e3sa.onrender.com/api/new-shows/update/${id}` : 'https://kn-backend-e3sa.onrender.com/api/new-shows/add';
 
                   const res = await fetch(url, {
                     method: id ? 'PUT' : 'POST',
@@ -692,7 +692,7 @@ export default function AdminDashboard() {
                   if (!window.confirm('Confirm permanent erasure?')) return;
                   const token = localStorage.getItem('token');
 
-                  const res = await fetch(`http://localhost:5000/api/new-shows/delete/${id}`, {
+                  const res = await fetch(`https://kn-backend-e3sa.onrender.com/api/new-shows/delete/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                   });
@@ -705,7 +705,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-        
+
         {/* CONTAINER 7: HIGH-VELOCITY BLOCK INTEGRATED WEEKLY SCHEDULE FORM */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xl mt-8 text-left">
           <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-3">
@@ -713,7 +713,7 @@ export default function AdminDashboard() {
             <h2 className="text-sm font-black text-white uppercase tracking-wider">Action 7: 7-Day Timetable Core Controller</h2>
           </div>
 
-          <form 
+          <form
             onSubmit={async (e) => {
               e.preventDefault();
               const payload = {
@@ -723,20 +723,20 @@ export default function AdminDashboard() {
                 durationInMinutes: parseInt(document.getElementById('week-duration').value, 10)
               };
               const token = localStorage.getItem('token');
-              
-              const res = await fetch('http://localhost:5000/api/weekly-schedule/add', {
+
+              const res = await fetch('https://kn-backend-e3sa.onrender.com/api/weekly-schedule/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(payload)
               });
-              if(res.ok) { 
-                alert('Slot Successfully Logged into 7-Day Grid Matrix!'); 
+              if (res.ok) {
+                alert('Slot Successfully Logged into 7-Day Grid Matrix!');
                 document.getElementById('week-show').value = '';
                 document.getElementById('week-start').value = '';
-              } else { 
-                alert('Transaction aborted by gatekeepers.'); 
+              } else {
+                alert('Transaction aborted by gatekeepers.');
               }
-            }} 
+            }}
             className="flex flex-col gap-4"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

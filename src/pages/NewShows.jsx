@@ -4,7 +4,7 @@ import HeaderBannerImage from '../assets/images/header_01.png'; // 🔒 सु�
 import { Link } from 'react-router-dom';
 
 
-const CONFIG = { BACKEND_BASE_URL: 'http://localhost:5000' };
+const CONFIG = { BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com' };
 
 export default function NewShows() {
   const [cards, setCards] = useState([]);

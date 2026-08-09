@@ -10,7 +10,7 @@ function GenreCatalog() {
   useEffect(() => {
     const fetchGenreShows = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/shows?t=${new Date().getTime()}`);
+        const response = await fetch(`https://kn-backend-e3sa.onrender.com/api/shows?t=${new Date().getTime()}`);
         if (response.ok) {
           const data = await response.json();
           

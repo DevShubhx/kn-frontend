@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
 const CONFIG = {
-  BACKEND_BASE_URL: 'http://localhost:5000',
+  BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com',
   REFRESH_INTERVAL_MS: 15000
 };
 
