@@ -54,7 +54,7 @@ export default function NewShows() {
         
         <Link
           to="/weekly-schedule"
-          className="w-35 max-w-xs md:w-40 md:absolute md:right-71 md:top-1 shrink-0 p-4 flex flex-col items-center justify-center z-30 mx-auto mt-1 md:mt-0 cursor-pointer transition-transform transform hover:scale-[1.03] active:scale-95 group"
+          className="w-32 max-w-xs md:w-32 md:absolute md:right-71 md:top-15 shrink-0 p- flex flex-col items-center justify-center z-30 mx-auto mt-1 md:mt-0 cursor-pointer transition-transform transform hover:scale-[1.03] active:scale-95 group"
         >
           <img
             src="/assets/images/scdul_btn.png"
@@ -85,7 +85,7 @@ export default function NewShows() {
               )}
               {/* 🎯 TEXT OFFSET ACCURACY: 
       -pl-14 यह पक्का करता है कि जब आइकॉन बाईं ओर पॉप-आउट हो, तो टेक्स्ट और इमेज आपस में कभी क्लैश न हों */}
-              <h2 className={`text-lg uppercase font-powerhouse font-bold truncate ${card.headerIconUrl ? 'pl-24' : 'pl-0'}`}>
+              <h2 className={`text-lg uppercase font-powerhouse font-bold truncate ${card.headerIconUrl ? 'pl-24' : 'pl-2'}`}>
                 {card.headerText}
               </h2>
             </div>
@@ -116,7 +116,7 @@ export default function NewShows() {
         )
       }
 
-      <div className="w-full max-w-xs md:w-80 md:absolute md:right-2 md:top-28 shrink-0 p-4 flex flex-col items-center justify-center z-10 mx-auto mt-10 md:mt-0">
+      <div className="w-full max-w-xs md:w-70 md:absolute md:right-0 md:top-36 shrink-0 p-4 flex flex-col items-center justify-center z-10 mx-auto mt-10 md:mt-0">
         <img
           src="/assets/images/sd_gang.svg"
           alt="Cartoon Network SD Gang Asset"

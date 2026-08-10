@@ -91,12 +91,12 @@ export default function InteractiveGallery() {
         {/* ---------------------------------------------------------------------- */}
         <div className="hidden md:block">
           {/* IMAGE TWO (img-2) - बेस एसेट लेयर (z-10) */}
-          <div className="absolute w-200 align-top z-10">
+          <div className="absolute w-180 align-top z-10">
             <img src={ImageTwo} alt="Grid Beta Desktop" className="w-full h-auto block pointer-events-none" />
           </div>
 
           {/* IMAGE ONE (img-1) - ओवरले फ्लोटिंग लेयर (z-20) */}
-          <div className="absolute left-[37%] top-39 w-140 z-20">
+          <div className="absolute left-[37%] top-39 w-120 z-20">
             <img src={ImageOne} alt="Grid Alpha Desktop" className="w-full h-auto block pointer-events-none" />
             
             {/* 🎯 DESKTOP FLOATING POLL OVERLAY MATRIX: इमेज के ठीक ऊपर एम्बेड किया गया कड़क पोलिंग बॉक्स */}
