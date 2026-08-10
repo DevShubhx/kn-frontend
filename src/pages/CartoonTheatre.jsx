@@ -1,5 +1,6 @@
 // src/pages/CartoonTheatre.jsx - The Perfect Interlocking 50% Scroll Engine
 import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 🔒 SECURE LOCAL ASSET INTEGRATION
 import TheatreLogoImage from '/assets/images/cn_theatre_top.svg';
@@ -10,6 +11,7 @@ const CONFIG = {
 };
 
 export default function CartoonTheatre() {
+    const navigate = useNavigate(); 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,6 +59,11 @@ export default function CartoonTheatre() {
   return (
     // 🎨 EXACT MATCH: क्लासिक CN पावरहाउस स्काई-ब्लू थीम बैकग्राउंड
     <div className=" bg-linear-to-b from-[#2e50d9] from-10% via-[#100e29] via-20% to-[#080714] to-90% w-auto min-h-screen text-white select-none selection:bg-black selection:text-white relative">
+
+      <button
+          onClick={() => navigate('/')}
+          className="bg-[#2629367e] hover:bg-zinc-700 text-white py-2 px-4 md:px-6 rounded transition-colors"
+        > ⬅ Back</button>
       
       {/* 🎪 THE MASTER INTERLOCKING WRAPPER CONTEXT */}
       {/* दोनों एलिमेंट्स अब एक ही मास्टर ब्लॉक में बंद हैं, जिससे ब्राउज़र का स्टिकी ट्रैक कभी नहीं टूटेगा */}

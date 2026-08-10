@@ -2,11 +2,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import HeaderBannerImage from '/assets/images/header_01.png'; // 🔒 सुरक्षित लोकल हेडर 
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const CONFIG = { BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com' };
 
 export default function NewShows() {
+  const navigate = useNavigate(); 
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,8 +31,11 @@ export default function NewShows() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#1d71cb] text-white">
+        
         <h2 className="text-xl font-black uppercase tracking-widest animate-pulse font-mono">⏳ SYNCING NEW SHOWS CATALOG...</h2>
+
       </div>
+      
     );
   }
 
@@ -39,8 +44,14 @@ export default function NewShows() {
 
       {/* 🎪 FIRST COMPONENT: HEADER LOGO IMAGE COVER AREA */}
       <div className="w-auto bg-[#ff5952] overflow-hidden mt-2">
-        <img src={HeaderBannerImage} alt="New Shows Broadcast Banner" className="w-3xl h-auto block pointer-events-none object-contain" />
 
+        <button
+          onClick={() => navigate('/')}
+          className="bg-[#2629367e] hover:bg-zinc-700 text-white py-2 px-4 md:px-6 rounded transition-colors"
+        > ⬅ Back</button>
+
+        <img src={HeaderBannerImage} alt="New Shows Broadcast Banner" className="w-3xl h-auto block pointer-events-none object-contain" />
+        
         <Link
           to="/weekly-schedule"
           className="w-35 max-w-xs md:w-40 md:absolute md:right-71 md:top-1 shrink-0 p-4 flex flex-col items-center justify-center z-30 mx-auto mt-1 md:mt-0 cursor-pointer transition-transform transform hover:scale-[1.03] active:scale-95 group"
@@ -82,7 +93,7 @@ export default function NewShows() {
             {/* 🎯 2. CARD BODY LAYOUT: Description with a small 1:1 image at top right corner */}
             <div className="w-full flex flex-row justify-between items-start gap-2">
               {/* Description Paragraph on Left */}
-              <p className="text-sm font-sterling font-medium text-white leading-relaxed grow text-left">
+              <p className="text-xs md:text-sm font-sterling font-medium text-white leading-relaxed grow text-left">
                 {card.description}
               </p>
 
