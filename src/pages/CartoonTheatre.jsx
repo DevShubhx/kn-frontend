@@ -130,7 +130,7 @@ export default function CartoonTheatre() {
             );
           })}
 
-          <img src="/src/assets/images/audience.png" alt="Audience"
+          <img src="/assets/images/audience.png" alt="Audience"
                  className='relative w-full' />
 
 
