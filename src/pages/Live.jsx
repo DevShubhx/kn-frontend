@@ -134,60 +134,68 @@ export default function LiveTVPage() {
     };
   }, []);
 
-  // ⏱️ स्यूडो-लाइव इंजन + ऑफ़-एयर काउंटडाउन + 15 मिनट प्री-शो चैट एक्टिवेशन
-  useEffect(() => {
-    if (schedule.length === 0) {
-      setCurrentVideo(null);
-      setTimeLeft('OFF-AIR');
-      setIsChatActiveEarly(false);
-      return;
+  // ⏱️ स्यूडो-लाइव इंजन + ऑफ़-एयर काउंटडाउन + 15 मिनट प्री-शो चैट एक्टिवेशन (TARGETED PRODUCTION PATCH)
+useEffect(() => {
+  if (schedule.length === 0) {
+    setCurrentVideo(null);
+    setTimeLeft('OFF-AIR');
+    setIsChatActiveEarly(false);
+    return;
+  }
+
+  const liveTimer = setInterval(() => {
+    // 🎯 FIXED HIGH ACCURACY: Render क्लाउड सर्वर और Vercel के बीच के 5:30 घंटे के टाइमज़ोन गैप को जड़ से खत्म करना
+    const localNow = new Date();
+    // ब्राउज़र की लोकल घड़ी से उसका टाइमज़ोन ऑफ़सेट (मिनटों में) निकालकर उसे सीधे एब्सोल्यूट UTC मिलिसेकंड में लॉक करना
+    const utcNowMs = localNow.getTime() + (localNow.getTimezoneOffset() * 60000);
+    
+    // 🔒 IST EMBED MATRIX: भारत का मानक समय UTC से कड़ाई से 5 घंटे 30 मिनट आगे (+5.5 * 3,600,000 ms) है
+    // यह 'correctedNowMs' अब दुनिया के किसी भी कोने, वीपीएन या सर्वर पर हो, हमेशा कड़ाई से शुद्ध भारतीय मानक समय के अनुसार ही टिक करेगा
+    const correctedNowMs = utcNowMs + (5.5 * 3600000) + serverClientOffset;
+
+    let targetShow = null;
+    const nextUpcomingShow = schedule.find(s => new Date(s.liveStartTime).getTime() > correctedNowMs);
+
+    for (let i = 0; i < schedule.length; i++) {
+      const show = schedule[i];
+      const startTimeMs = new Date(show.liveStartTime).getTime();
+      const endTimeMs = startTimeMs + (show.durationInSeconds * 1000);
+
+      if (correctedNowMs >= startTimeMs && correctedNowMs < endTimeMs) {
+        targetShow = show;
+        break;
+      }
     }
 
-    const liveTimer = setInterval(() => {
-      const correctedNowMs = Date.now() + serverClientOffset;
-      let targetShow = null;
+    if (!targetShow && nextUpcomingShow) {
+      const diffMs = new Date(nextUpcomingShow.liveStartTime).getTime() - correctedNowMs;
 
-      const nextUpcomingShow = schedule.find(s => new Date(s.liveStartTime).getTime() > correctedNowMs);
-
-      for (let i = 0; i < schedule.length; i++) {
-        const show = schedule[i];
-        const startTimeMs = new Date(show.liveStartTime).getTime();
-        const endTimeMs = startTimeMs + (show.durationInSeconds * 1000);
-
-        if (correctedNowMs >= startTimeMs && correctedNowMs < endTimeMs) {
-          targetShow = show;
-          break;
-        }
-      }
-
-      if (!targetShow && nextUpcomingShow) {
-        const diffMs = new Date(nextUpcomingShow.liveStartTime).getTime() - correctedNowMs;
-
-        if (diffMs <= 15 * 60 * 1000) {
-          setIsChatActiveEarly(true);
-        } else {
-          setIsChatActiveEarly(false);
-        }
-
-        const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
-        const mins = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        const secs = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
-        setTimeLeft(`${hours}:${mins}:${secs}`);
+      if (diffMs <= 15 * 60 * 1000) {
+        setIsChatActiveEarly(true);
       } else {
-        setTimeLeft('');
-        if (targetShow) setIsChatActiveEarly(true);
+        setIsChatActiveEarly(false);
       }
 
-      if (targetShow) {
-        // Kick.com Live Integration: Stream URL allocation is handled by custom iframe injection engine
-        setCurrentVideo(targetShow);
-      } else {
-        setCurrentVideo(null);
-      }
-    }, CONFIG.POLL_INTERVAL_MS);
+      const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
+      const mins = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      const secs = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
+      setTimeLeft(`${hours}:${mins}:${secs}`);
+    } else {
+      setTimeLeft('');
+      if (targetShow) setIsChatActiveEarly(true);
+    }
 
-    return () => clearInterval(liveTimer);
-  }, [schedule, serverClientOffset]);
+    if (targetShow) {
+      // Kick.com Live Integration: Stream URL allocation is handled by custom iframe injection engine
+      setCurrentVideo(targetShow);
+    } else {
+      setCurrentVideo(null);
+    }
+  }, CONFIG.POLL_INTERVAL_MS);
+
+  return () => clearInterval(liveTimer);
+}, [schedule, serverClientOffset]);
+
 
   // 🎛️ मास्टर स्क्रीनबग पोलिंग लेयर (Engineered with Cache-Buster & Anti-Cache Policy)
   useEffect(() => {

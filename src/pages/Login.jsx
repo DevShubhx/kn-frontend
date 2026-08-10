@@ -70,7 +70,7 @@ function Login() {
                     className="w-full md:w-[45%] max-w-sm md:max-w-md flex flex-col items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-[1.02] shrink-0"
                 >
                     <img 
-                        src={'src/assets/images/signup-banner.png'} // या public फोल्डर के लिए "/signup-banner.png"
+                        src={'/assets/images/signup-banner.png'} // या public फोल्डर के लिए "/signup-banner.png"
                         alt="Sign Up Banner" 
                         className="w-full h-auto object-contain drop-shadow-[5px_5px_0px_rgba(0,0,0,1)]"
                     />
