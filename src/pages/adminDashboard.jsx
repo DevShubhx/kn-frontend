@@ -167,7 +167,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // ⚡ UPDATED ACTION 3: 100% Independent Custom Live TV Scheduler
+  // ⚡ UPDATED ACTION 3: 100% Independent Custom Live TV Scheduler (FIXED FOR CLOUD UTC)
   const handleScheduleLive = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -176,6 +176,14 @@ export default function AdminDashboard() {
 
     try {
       const token = localStorage.getItem('token');
+
+      // 🎯 FIXED HIGH ACCURACY: इनपुट समय "2026-08-10T17:46" को कड़ाई से भारतीय टाइमज़ोन के अनुसार ISO UTC में पार्स करना
+      if (!liveStartTime) throw new Error("Please select a valid date and time.");
+      const finalizedUtcDate = new Date(liveStartTime + ":00+05:30");
+
+      if (isNaN(finalizedUtcDate.getTime())) {
+        throw new Error("Invalid date time parameter structure.");
+      }
 
       const response = await fetch('https://kn-backend-e3sa.onrender.com/api/live-tv/schedule', {
         method: 'POST',
@@ -187,7 +195,9 @@ export default function AdminDashboard() {
           customTitle, // आपका हाथ से टाइप किया हुआ कोई भी नया नाम
           episodeTitle,
           streamUrl,
-          liveStartTime,
+          // 🔒 LOCKED PAYLOAD: अब यह स्ट्रिंग .toISOString() के ज़रिए डेटाबेस में 5:30 घंटे पीछे (UTC) स्टोर होगी 
+          // और फ्रंटएंड पेजों पर आते ही आपकी लाइव घड़ी से 100% परफेक्ट सिंक हो जाएगी
+          liveStartTime: finalizedUtcDate.toISOString(),
           durationInSeconds: parseInt(liveDuration, 10)
         })
       });
@@ -203,6 +213,7 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
 
   // 🎪 UPDATED ACTION 4: Cartoon Theatre 4 Sundays Slot Controller
   const handleUpdateTheatre = async (e) => {
