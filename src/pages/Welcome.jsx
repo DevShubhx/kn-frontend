@@ -361,7 +361,7 @@ useEffect(() => {
 </div>
                     <button
                         onClick={() => navigate('/catalog')}
-                        className="py-3 px-8 sm:py-4 sm:px-12 font-eagle font-bold text-base sm:text-lg text-white bg-red-600 rounded-full shadow-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-orange-500 active:scale-95"
+                        className="py-3 px-8 sm:py-4 sm:px-12 font-eagle font-bold text-base sm:text-lg text-white bg-red-600 rounded-full shadow-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-orange-500 active:scale-95 mt-1"
                     >
                         Browse Shows
                     </button>

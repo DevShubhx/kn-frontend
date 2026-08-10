@@ -338,6 +338,13 @@ useEffect(() => {
 
   return (
     <div style={{ textAlign: 'center', backgroundColor: '#111', color: '#fff', padding: '30px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
+      
+      <button
+          onClick={() => navigate('/')}
+          className="bg-[#2629367e] mr-75 mb-4 hover:bg-zinc-700 text-white py-2 px-2 md:px-6 md:mr-255 rounded transition-colors"
+        > ⬅ Back</button>
+
+      
       <h1 style={{ letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>📺 CARTOON NETWORK LIVE TV</h1>
 
       {loading ? (

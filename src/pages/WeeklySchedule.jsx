@@ -1,5 +1,6 @@
 // src/pages/Schedule.jsx - Retro 7-Day Cable Grid Edition
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CONFIG = {
   BACKEND_BASE_URL: 'https://kn-backend-e3sa.onrender.com',
@@ -7,6 +8,7 @@ const CONFIG = {
 };
 
 export default function Schedule() {
+   const navigate = useNavigate();
   const [timeline, setTimeline] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -62,6 +64,7 @@ export default function Schedule() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#1d71cb] text-white">
+        
         <h2 className="text-xl font-black uppercase tracking-widest animate-pulse font-mono">⏳ LOADING...</h2>
       </div>
     );
@@ -69,6 +72,11 @@ export default function Schedule() {
 
   return (
     <div className="min-h-screen h-auto w-full flex flex-col items-center justify-start py-8 px-4 select-none text-white font-sans bg-[linear-gradient(to_bottom,#ffdb0e_25%,#ff1403_60%,#165eac_75%,#000000_85%)] bg-scroll">
+      
+      <button
+          onClick={() => navigate('/')}
+          className="bg-[#2629367e] hover:bg-zinc-700 text-white py-2 px-4 md:px-6 md:mr-255 rounded transition-colors"
+        > ⬅ Back</button>
 
       {/* 🎪 TITLE ENGINE BLOCK */}
       <div className="text-center mb-2 max-w-190 w-full">
