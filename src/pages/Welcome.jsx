@@ -21,8 +21,8 @@ function Welcome() {
     // 📸 5 इमेज कार्ड्स का डेटा (Public फोल्डर का सीधा रास्ता)
     const CARDS_DATA = useMemo(() => [
         { id: 1, img: "/assets/images/b_1.svg",  buttonLabel: "Home", linkTo: "/genre/Boomerang" },
-        { id: 2, img: "/assets/images/b2.png",  buttonLabel: "CN Theatre", linkTo: "/theatre" },
-        { id: 3, img: "/assets/images/b3.png",  buttonLabel: "New Show", linkTo: "/new-shows" },
+        { id: 2, img: "/assets/images/cnct.gif",  buttonLabel: "CN Theatre", linkTo: "/theatre" },
+        { id: 3, img: "/assets/images/newshow-banner.png",  buttonLabel: "New Show", linkTo: "/new-shows" },
         { id: 4, img: "/assets/images/b4.png",  buttonLabel: ".ComPick", linkTo: "/compick" },
         { id: 5, img: "/assets/images/b5.png",  buttonLabel: "Schedule", linkTo: "/weekly-schedule" }
     ], []);
