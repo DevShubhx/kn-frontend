@@ -368,13 +368,13 @@ useEffect(() => {
                 </div>
             </main>
             {/* 🎯 SECTION FOR GENRE CARDS GRIDS */}
-            <section className="w-full max-w-5xl px-4 py-0 box-border mb-12">
+            <section className="w-full h-full max-w-5xl px-4 py-0 box-border mb-12">
                 <h2 className="w-full font-eagle font-bold text-xl sm:text-2xl md:text-3xl border-b-2 border-red-600 pb-3 mb-8 tracking-wide drop-shadow-md text-left">
                     🔥 Programing Blocks
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center items-center">
                     {[
-                        { name: 'TOONAMI', tag: 'TOONAMI', image: 'https://i.makeagif.com/media/1-08-2018/yi0Ydc.gif', desc: 'Saturdays - Sundays at 8 PM' },
+                        { name: 'TOONAMI', tag: 'TOONAMI', image: 'assets/images/toonami-banner.gif', desc: 'Saturdays - Sundays at 8 PM' },
                         { name: 'Tiny TV', tag: 'Tiny TV', image: 'https://unsplash.com', desc: 'Old school cartoon network favorites' },
                         { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'https://unsplash.com', desc: 'High energy superhero adventures' },
                         { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'https://unsplash.com', desc: 'Futuristic worlds and space chronicles' },
@@ -384,9 +384,9 @@ useEffect(() => {
                         <div
                             key={group.tag}
                             onClick={() => navigate(`/genre/${encodeURIComponent(group.tag)}`)}
-                            className="w-full bg-slate-900/90 border border-slate-700/50 rounded-xl overflow-hidden shadow-2xl cursor-pointer hover:scale-[1.03] transition-transform duration-200 flex flex-col h-72"
+                            className="w-full bg-slate-900/90 border border-slate-700/50 rounded-xl overflow-hidden shadow-2xl cursor-pointer hover:scale-[1.03] transition-transform duration-200 flex flex-col h-full min-h-64"
                         >
-                            <div className="w-full h-36 bg-slate-800 flex items-center justify-center overflow-hidden relative">
+                            <div className="w-full h-full bg-slate-800 flex items-center justify-center overflow-hidden relative">
                                 <img src={group.image} alt={group.name} className="w-full h-full object-cover opacity-80" />
                             </div>
                             <div className="p-4 flex-1 flex flex-col justify-between">
