@@ -23,7 +23,7 @@ function Welcome() {
         { id: 1, img: "/assets/images/b_1.svg",  buttonLabel: "Home", linkTo: "/genre/Boomerang" },
         { id: 2, img: "/assets/images/cnct.gif",  buttonLabel: "CN Theatre", linkTo: "/theatre" },
         { id: 3, img: "/assets/images/newshow-banner.png",  buttonLabel: "New Show", linkTo: "/new-shows" },
-        { id: 4, img: "/assets/images/b4.png",  buttonLabel: ".ComPick", linkTo: "/compick" },
+        { id: 4, img: "/assets/images/compick-banner.png",  buttonLabel: ".ComPick", linkTo: "/compick" },
         { id: 5, img: "/assets/images/b5.png",  buttonLabel: "Schedule", linkTo: "/weekly-schedule" }
     ], []);
 
@@ -374,7 +374,7 @@ useEffect(() => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center items-center">
                     {[
-                        { name: 'TOONAMI', tag: 'TOONAMI', image: 'https://unsplash.com', desc: 'Saturdays - Sundays at 8 PM' },
+                        { name: 'TOONAMI', tag: 'TOONAMI', image: 'https://i.makeagif.com/media/1-08-2018/yi0Ydc.gif', desc: 'Saturdays - Sundays at 8 PM' },
                         { name: 'Tiny TV', tag: 'Tiny TV', image: 'https://unsplash.com', desc: 'Old school cartoon network favorites' },
                         { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'https://unsplash.com', desc: 'High energy superhero adventures' },
                         { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'https://unsplash.com', desc: 'Futuristic worlds and space chronicles' },
