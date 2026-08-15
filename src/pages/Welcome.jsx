@@ -374,10 +374,10 @@ useEffect(() => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 justify-center items-center">
                     {[
-                        { name: 'TOONAMI', tag: 'TOONAMI', image: 'assets/images/toonami-banner.gif', desc: 'Saturdays - Sundays at 8 PM' },
-                        { name: 'Tiny TV', tag: 'Tiny TV', image: 'https://unsplash.com', desc: 'Old school cartoon network favorites' },
-                        { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'https://unsplash.com', desc: 'High energy superhero adventures' },
-                        { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'https://unsplash.com', desc: 'Futuristic worlds and space chronicles' },
+                        { name: 'TOONAMI', tag: 'TOONAMI', image: 'assets/images/toonami-banner.gif', desc: 'Building you a better cartoon show... we call it Toonami' },
+                        { name: 'Tiny TV', tag: 'Tiny TV', image: 'assets/images/tiny-tv-banner.gif', desc: 'Our childhood favorites mind calming shows' },
+                        { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'assets/images/tccs-banner.gif', desc: 'The classic cartoon network originals' },
+                        { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'assets/images/cnct-banner.gif', desc: 'Block buster animated movies every week' },
                         { name: 'Power Zone', tag: 'Power Zone', image: 'https://unsplash.com', desc: 'Spooky and terrifying horror tales' },
                         { name: 'Boomerang', tag: 'Boomerang', image: 'https://unsplash.com', desc: 'Laugh out loud ultimate comedy' }
                     ].map((group) => (
