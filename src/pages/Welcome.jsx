@@ -20,11 +20,11 @@ function Welcome() {
 
     // 📸 5 इमेज कार्ड्स का डेटा (Public फोल्डर का सीधा रास्ता)
     const CARDS_DATA = useMemo(() => [
-        { id: 1, img: "/assets/images/b_1.svg",  buttonLabel: "Home", linkTo: "/genre/Boomerang" },
-        { id: 2, img: "/assets/images/cnct.gif",  buttonLabel: "CN Theatre", linkTo: "/theatre" },
-        { id: 3, img: "/assets/images/newshow-banner.png",  buttonLabel: "New Show", linkTo: "/new-shows" },
-        { id: 4, img: "/assets/images/compick-banner.png",  buttonLabel: ".ComPick", linkTo: "/compick" },
-        { id: 5, img: "/assets/images/b5.png",  buttonLabel: "Schedule", linkTo: "/weekly-schedule" }
+        { id: 1, img: "/assets/images/b_1.svg", buttonLabel: "Home", linkTo: "/genre/Boomerang" },
+        { id: 2, img: "/assets/images/cnct.gif", buttonLabel: "CN Theatre", linkTo: "/theatre" },
+        { id: 3, img: "/assets/images/newshow-banner.png", buttonLabel: "New Show", linkTo: "/new-shows" },
+        { id: 4, img: "/assets/images/compick-banner.png", buttonLabel: ".ComPick", linkTo: "/compick" },
+        { id: 5, img: "/assets/images/b5.png", buttonLabel: "Schedule", linkTo: "/weekly-schedule" }
     ], []);
 
 
@@ -43,44 +43,44 @@ function Welcome() {
         };
     }, [CARDS_DATA.length]);
 
-   // ⏱️ सुपर-स्मार्ट डायनेमिक प्रीमियर काउंटडाउन इंजन (TARGETED PRODUCTION PATCH)
-useEffect(() => {
-    const calculateCountdown = () => {
-        if (!liveSchedule || liveSchedule.length === 0) {
-            setTimeLeft('');
-            return;
-        }
+    // ⏱️ सुपर-स्मार्ट डायनेमिक प्रीमियर काउंटडाउन इंजन (TARGETED PRODUCTION PATCH)
+    useEffect(() => {
+        const calculateCountdown = () => {
+            if (!liveSchedule || liveSchedule.length === 0) {
+                setTimeLeft('');
+                return;
+            }
 
-        // 🎯 FIXED HIGH ACCURACY: Render / Vercel के क्लाउड टाइम ड्रिफ्ट को कुचलने के लिए मास्टर हुक
-        // यदि आपके API रिस्पॉन्स पेलोड में 'serverTimeMs' आ रहा है, तो उसका उपयोग करें, अन्यथा लोकल टाइम ज़ोन ऑफ़सेट को मैन्युअल रूप से बेअसर (Neutralize) करें
-        const localNow = new Date();
-        // ब्राउज़र की लोकल घड़ी से उसका टाइमज़ोन ऑफ़सेट (मिनटों में) निकालकर उसे सीधे एब्सोल्यूट UTC मिलिसेकंड में लॉक करना
-        const utcNowMs = localNow.getTime() + (localNow.getTimezoneOffset() * 60000);
-        
-        // 🔒 IST EMBED MATRIX: भारत का मानक समय UTC से कड़ाई से 5 घंटे 30 मिनट आगे (+5.5 * 3,600,000 ms) है
-        // यह 'now' वेरिएबल अब दुनिया के किसी भी कोने या सर्वर पर हो, हमेशा कड़ाई से शुद्ध भारतीय समय के एपॉक पर ही टिक करेगा
-        const now = utcNowMs + (5.5 * 3600000);
+            // 🎯 FIXED HIGH ACCURACY: Render / Vercel के क्लाउड टाइम ड्रिफ्ट को कुचलने के लिए मास्टर हुक
+            // यदि आपके API रिस्पॉन्स पेलोड में 'serverTimeMs' आ रहा है, तो उसका उपयोग करें, अन्यथा लोकल टाइम ज़ोन ऑफ़सेट को मैन्युअल रूप से बेअसर (Neutralize) करें
+            const localNow = new Date();
+            // ब्राउज़र की लोकल घड़ी से उसका टाइमज़ोन ऑफ़सेट (मिनटों में) निकालकर उसे सीधे एब्सोल्यूट UTC मिलिसेकंड में लॉक करना
+            const utcNowMs = localNow.getTime() + (localNow.getTimezoneOffset() * 60000);
 
-        // बाकी का आपका पूरा कोड बिल्कुल अछूता और 100% सुरक्षित है:
-        const nextShow = liveSchedule.find(s => Date.parse(s.liveStartTime) > now);
+            // 🔒 IST EMBED MATRIX: भारत का मानक समय UTC से कड़ाई से 5 घंटे 30 मिनट आगे (+5.5 * 3,600,000 ms) है
+            // यह 'now' वेरिएबल अब दुनिया के किसी भी कोने या सर्वर पर हो, हमेशा कड़ाई से शुद्ध भारतीय समय के एपॉक पर ही टिक करेगा
+            const now = utcNowMs + (5.5 * 3600000);
 
-        if (!nextShow) {
-            setTimeLeft('OFF-AIR');
-            return;
-        }
+            // बाकी का आपका पूरा कोड बिल्कुल अछूता और 100% सुरक्षित है:
+            const nextShow = liveSchedule.find(s => Date.parse(s.liveStartTime) > now);
 
-        const diffMs = Date.parse(nextShow.liveStartTime) - now;
-        const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
-        const mins = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        const secs = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
+            if (!nextShow) {
+                setTimeLeft('OFF-AIR');
+                return;
+            }
 
-        setTimeLeft(`${hours}:${mins}:${secs}`);
-    };
+            const diffMs = Date.parse(nextShow.liveStartTime) - now;
+            const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
+            const mins = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const secs = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
 
-    calculateCountdown();
-    const interval = setInterval(calculateCountdown, 1000);
-    return () => clearInterval(interval);
-}, [liveSchedule]);
+            setTimeLeft(`${hours}:${mins}:${secs}`);
+        };
+
+        calculateCountdown();
+        const interval = setInterval(calculateCountdown, 1000);
+        return () => clearInterval(interval);
+    }, [liveSchedule]);
 
 
     useEffect(() => {
@@ -309,7 +309,7 @@ useEffect(() => {
 
                     {/* 🔝 TOP CONTROL BAR (B1 to B5 Buttons) */}
                     <div className="w-auto flex justify-between items-center bg-slate-900 border border-blue-900 rounded-xl p-2 shadow-lg mb-1">
-                        
+
 
                         <div className="flex gap-1.5">
                             {CARDS_DATA.map((card, index) => (
@@ -317,8 +317,8 @@ useEffect(() => {
                                     key={index}
                                     onClick={() => setCarouselIndex(index)}
                                     className={`text-xs px-3 py-1.5 font-black rounded-md tracking-wider transition-all duration-300 border ${carouselIndex === index
-                                            ? 'bg-red-600 border-red-500 text-white shadow-md shadow-red-900/50 scale-120'
-                                            : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                                        ? 'bg-red-600 border-red-500 text-white shadow-md shadow-red-900/50 scale-120'
+                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
                                         }`}
                                 >
                                     {card.buttonLabel}
@@ -328,37 +328,37 @@ useEffect(() => {
                     </div>
 
                     {/* 🎞️ SLIDING VIEWPORT (इल्यूजन बॉक्स जो राइट-टू-लेफ्ट खिसकेगा) */}
-                   <div className="w-full aspect-video md:w-175 md:h-100 mx-auto rounded-xl overflow-hidden relative">
-    <div
-        className="flex w-full h-full transition-transform duration-500 ease-out"
-        style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
-    >
-        {CARDS_DATA.map((card) => (
-            <div 
-                key={card.id}
-                onClick={() => navigate(card.linkTo)}
-                // 🎯 FIXED child wrapper dimensions:
-                // यहाँ भी w-full h-full को पूरी तरह स्वतंत्र रखा गया है ताकि पैरेंट का स्ट्रेच मोशन सीमलेस ट्रांसफर हो सके
-                className="w-full h-full shrink-0 relative group select-none cursor-pointer"
-            >
-                <img
-                    src={card.img}
-                    alt={card.title}
-                    // object-cover और h-full यह पक्का करेगा कि इमेज कभी भी चपटी (warp) या कटी हुई न दिखे
-                    className="w-full h-full object-cover transition-transform duration-1000 pointer-events-none"
-                    loading="lazy"
-                />
-                
-                {/* विंटेज स्टूडियो टाइटल ओवरले (यदि आपके लेआउट में एम्बेडेड है) */}
-                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/20 to-transparent p-4 flex items-end justify-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <h2 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide drop-shadow-[2px_2px_0px_#000]">
-                        {card.title}
-                    </h2>
-                </div>
-            </div>
-        ))}
-    </div>
-</div>
+                    <div className="w-full aspect-video md:w-175 md:h-100 mx-auto rounded-xl overflow-hidden relative">
+                        <div
+                            className="flex w-full h-full transition-transform duration-500 ease-out"
+                            style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+                        >
+                            {CARDS_DATA.map((card) => (
+                                <div
+                                    key={card.id}
+                                    onClick={() => navigate(card.linkTo)}
+                                    // 🎯 FIXED child wrapper dimensions:
+                                    // यहाँ भी w-full h-full को पूरी तरह स्वतंत्र रखा गया है ताकि पैरेंट का स्ट्रेच मोशन सीमलेस ट्रांसफर हो सके
+                                    className="w-full h-full shrink-0 relative group select-none cursor-pointer"
+                                >
+                                    <img
+                                        src={card.img}
+                                        alt={card.title}
+                                        // object-cover और h-full यह पक्का करेगा कि इमेज कभी भी चपटी (warp) या कटी हुई न दिखे
+                                        className="w-full h-full object-cover transition-transform duration-1000 pointer-events-none"
+                                        loading="lazy"
+                                    />
+
+                                    {/* विंटेज स्टूडियो टाइटल ओवरले (यदि आपके लेआउट में एम्बेडेड है) */}
+                                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/20 to-transparent p-4 flex items-end justify-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <h2 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide drop-shadow-[2px_2px_0px_#000]">
+                                            {card.title}
+                                        </h2>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                     <button
                         onClick={() => navigate('/catalog')}
                         className="py-3 px-8 sm:py-4 sm:px-12 font-eagle font-bold text-base sm:text-lg text-white bg-red-600 rounded-full shadow-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-orange-500 active:scale-95 mt-1"
@@ -377,8 +377,8 @@ useEffect(() => {
                         { name: 'TOONAMI', tag: 'TOONAMI', image: 'assets/images/toonami-banner.gif', desc: 'Building you a better cartoon show... we call it Toonami' },
                         { name: 'Tiny TV', tag: 'Tiny TV', image: 'assets/images/tinytv-banner.gif', desc: 'Our childhood favorites mind calming shows' },
                         { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'assets/images/tccs-banner.gif', desc: 'The classic cartoon network originals' },
-                        { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'assets/images/cnct-banner.gif', desc: 'Block buster animated movies every week' },
                         { name: 'Power Zone', tag: 'Power Zone', image: 'assets/images/powerzone-banner.gif', desc: 'Spooky and terrifying horror tales' },
+                        { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'assets/images/cnct-banner.gif', desc: 'Block buster animated movies every week' },
                         { name: 'Boomerang', tag: 'Boomerang', image: 'assets/images/boomerang-banner.gif', desc: 'Laugh out loud ultimate comedy' }
                     ].map((group) => (
                         <div
