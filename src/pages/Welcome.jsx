@@ -378,8 +378,8 @@ useEffect(() => {
                         { name: 'Tiny TV', tag: 'Tiny TV', image: 'assets/images/tinytv-banner.gif', desc: 'Our childhood favorites mind calming shows' },
                         { name: 'Cartoon Cartoons', tag: 'Cartoon Cartoons', image: 'assets/images/tccs-banner.gif', desc: 'The classic cartoon network originals' },
                         { name: 'Cartoon Theatre', tag: 'Cartoon Theatre', image: 'assets/images/cnct-banner.gif', desc: 'Block buster animated movies every week' },
-                        { name: 'Power Zone', tag: 'Power Zone', image: 'https://unsplash.com', desc: 'Spooky and terrifying horror tales' },
-                        { name: 'Boomerang', tag: 'Boomerang', image: 'https://unsplash.com', desc: 'Laugh out loud ultimate comedy' }
+                        { name: 'Power Zone', tag: 'Power Zone', image: 'assets/images/powerzone-banner.gif', desc: 'Spooky and terrifying horror tales' },
+                        { name: 'Boomerang', tag: 'Boomerang', image: 'assets/images/boomerang-banner.gif', desc: 'Laugh out loud ultimate comedy' }
                     ].map((group) => (
                         <div
                             key={group.tag}
