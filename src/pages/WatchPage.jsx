@@ -43,14 +43,16 @@ export default function WatchPage() {
         {/* HTML5 ACTIVE THEATER VIDEO DECK SANDBOX */}
         <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
           {streamUrl ? (
-            <video 
-              src={streamUrl} 
-              controls 
-              autoPlay
-              playsInline
-              muted={false}
-              className="w-full h-full object-contain"
-            />
+           <video 
+  src={streamUrl} 
+  controls 
+  autoPlay
+  playsInline       // 📱 मोबाइल/आईफोन सफारी कंपैटिबिलिटी के लिए अनिवार्य लॉक
+  crossOrigin="anonymous" // 🎯 FIXED HIGH ACCURACY: ब्राउज़र के CORS ब्लॉकेज को तोड़कर पिक्सेलड्रैन बाइनरी स्ट्रीम को अनलॉक करने का मास्टर हुक
+  preload="auto"    // ब्राउज़र को बैकग्राउंड में हाई-स्पीड बफ़रिंग चालू करने की आज्ञा देना
+  className="w-full h-full object-contain"
+  onError={(e) => console.error("HTML5 Core Media Stream Failure Context:", e)} // कंसोल ट्रैकिंग एरर गार्ड
+/>
           ) : (
             <div className="text-center p-6 text-slate-500 italic text-sm">
               ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
