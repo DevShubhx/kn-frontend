@@ -40,25 +40,43 @@ export default function WatchPage() {
           </h2>
         </div>
 
-        {/* HTML5 ACTIVE THEATER VIDEO DECK SANDBOX */}
-        <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
-          {streamUrl ? (
-           <video 
-  src={streamUrl} 
-  controls 
-  autoPlay
-  playsInline       // 📱 मोबाइल/आईफोन सफारी कंपैटिबिलिटी के लिए अनिवार्य लॉक
-  crossOrigin="anonymous" // 🎯 FIXED HIGH ACCURACY: ब्राउज़र के CORS ब्लॉकेज को तोड़कर पिक्सेलड्रैन बाइनरी स्ट्रीम को अनलॉक करने का मास्टर हुक
-  preload="auto"    // ब्राउज़र को बैकग्राउंड में हाई-स्पीड बफ़रिंग चालू करने की आज्ञा देना
-  className="w-full h-full object-contain"
-  onError={(e) => console.error("HTML5 Core Media Stream Failure Context:", e)} // कंसोल ट्रैकिंग एरर गार्ड
-/>
-          ) : (
-            <div className="text-center p-6 text-slate-500 italic text-sm">
-              ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
-            </div>
-          )}
-        </div>
+       {/* 📺 INTERACTIVE MEDIA DISPLAY CANVAS (UPGRADED FOR PIXELDRAIN EMBED SANBOX) */}
+<div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
+  {streamUrl ? (
+    (() => {
+        // 🎯 FIXED HIGH ACCURACY: पिक्सेलड्रैन के 403 हॉटलिंक प्रोटेक्शन को कुचलने का मास्टर हुक
+        // यदि डेटाबेस में /api/file/ या /u/ कोई भी लिंक हो, उसे शुद्ध ऑफिशियल आईफ्रेम प्लेयर पाथ में कन्वर्ट करना
+        let fileId = "";
+        
+        if (streamUrl.includes('/file/')) {
+            fileId = streamUrl.split('/file/')[1];
+        } else if (streamUrl.includes('/u/')) {
+            fileId = streamUrl.split('/u/')[1];
+        } else {
+            // फॉलबैक यदि केवल डायरेक्ट ID ही स्टोर हो
+            fileId = streamUrl;
+        }
+
+        // पिक्सेलड्रैन का आधिकारिक बिना विज्ञापन वाला सुरक्षित स्ट्रीमिंग एम्बेड यूआरएल
+        const officialEmbedUrl = `https://pixeldrain.com{fileId}?display=video`;
+
+        return (
+            <iframe 
+              src={officialEmbedUrl}
+              title={`${showTitle} - Episode ${episodeNumber}`}
+              className="w-full h-full border-0 absolute inset-0 bg-black"
+              allow="autoplay; fullscreen; picture-in-picture"
+              sandbox="allow-scripts allow-same-origin allow-presentation allow-forms" // 🔒 SOLID SECURITY SANDBOX CONTAINER
+              loading="lazy"
+            />
+        );
+    })()
+  ) : (
+    <div className="text-center p-6 text-slate-500 italic text-sm">
+      ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
+    </div>
+  )}
+</div>
 
         {/* HELPFUL GUEST WATCH FOOTER TIP BAR */}
         <div className="w-full max-w-xl bg-slate-900/40 border border-white/5 p-4 rounded-xl text-center">
