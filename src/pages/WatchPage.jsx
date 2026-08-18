@@ -47,6 +47,8 @@ export default function WatchPage() {
               src={streamUrl} 
               controls 
               autoPlay
+              playsInline
+              muted={false}
               className="w-full h-full object-contain"
             />
           ) : (
