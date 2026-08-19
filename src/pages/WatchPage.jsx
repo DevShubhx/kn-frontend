@@ -40,34 +40,56 @@ export default function WatchPage() {
           </h2>
         </div>
 
-        {/* HTML5 ACTIVE THEATER VIDEO DECK SANDBOX */}
-        <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
-          {streamUrl ? (
-            (() => {
-              let cleanMegaEmbedUrl = streamUrl.trim();
+        {/* 📺 INTERACTIVE MEDIA DISPLAY CANVAS (SECURED FOR AD-REVENUE) */}
+<div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8 group select-none">
+  {streamUrl ? (
+    (() => {
+      let cleanMegaEmbedUrl = streamUrl.trim();
 
-              // 🎯 ऑटो-कन्वर्टर: यदि मोंगोडीबी की streamUrl फ़ील्ड में मेगा का /file/ लिंक आता है, तो उसे /embed/ में बदलना
-              if (cleanMegaEmbedUrl.includes('mega.nz/file/')) {
-                cleanMegaEmbedUrl = cleanMegaEmbedUrl.replace('mega.nz/file/', 'mega.nz/embed/');
-              }
+      // ऑटो-कन्वर्टर: यदि मोंगोडीबी की streamUrl फ़ील्ड में मेगा का /file/ लिंक आता है, तो उसे /embed/ में बदलना
+      if (cleanMegaEmbedUrl.includes('mega.nz/file/')) {
+        cleanMegaEmbedUrl = cleanMegaEmbedUrl.replace('mega.nz/file/', 'mega.nz/embed/');
+      }
 
-              return (
-                <iframe 
-                  src={cleanMegaEmbedUrl}
-                  title={`${showTitle} - Episode ${episodeNumber}`}
-                  className="w-full h-full border-0 absolute inset-0 bg-black"
-                  allow="autoplay; fullscreen"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              );
-            })()
-          ) : (
-            <div className="text-center p-6 text-slate-500 italic text-sm">
-              ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
-            </div>
-          )}
+      return (
+        <div className="w-full h-full relative">
+          
+          {/* 🔒 SECURITY OVERLAY BLOCK A: टॉप-राइट कॉर्नर मास्क (मेगा के शेयर और क्लाउड लिंक्स को ब्लॉक करने के लिए) */}
+          <div className="absolute top-0 right-0 w-[150px] h-[60px] bg-transparent z-40 pointer-events-auto cursor-default" 
+               title="Streaming Secured" 
+               onClick={(e) => e.stopPropagation()} 
+          />
+
+          {/* 🔒 SECURITY OVERLAY BLOCK B: बॉटम-राइट कॉर्नर मास्क (प्लेयर के भीतर मौजूद 'Direct Download' बटन को ब्लॉक करने के लिए) */}
+          <div className="absolute bottom-0 right-0 w-[120px] h-[50px] bg-transparent z-40 pointer-events-auto cursor-default" 
+               onClick={(e) => e.stopPropagation()} 
+          />
+
+          {/* 🔒 SECURITY OVERLAY BLOCK C: टॉप-लेफ्ट कॉर्नर मास्क (मेगा के लोगो और फ़ाइल नाम पर क्लिक रोकने के लिए) */}
+          <div className="absolute top-0 left-0 w-[70%] h-[60px] bg-transparent z-40 pointer-events-auto cursor-default" 
+               onClick={(e) => e.stopPropagation()} 
+          />
+
+          {/* 🎬 मुख्य मेगा एम्बेड आईफ्रेम */}
+          <iframe 
+            src={cleanMegaEmbedUrl}
+            title={`${showTitle} - Episode ${episodeNumber}`}
+            className="w-full h-full border-0 absolute inset-0 bg-black z-10"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            loading="lazy"
+          />
+          
         </div>
+      );
+    })()
+  ) : (
+    <div className="text-center p-6 text-slate-500 italic text-sm">
+      ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
+    </div>
+  )}
+</div>
+
 
         {/* HELPFUL GUEST WATCH FOOTER TIP BAR */}
         <div className="w-full max-w-xl bg-slate-900/40 border border-white/5 p-4 rounded-xl text-center">
