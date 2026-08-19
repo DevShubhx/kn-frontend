@@ -57,7 +57,7 @@ export default function WatchPage() {
         {/* 🎬 मुख्य वीडियो कंटेनर (सुरक्षित फ्रेम) */}
         <div 
           ref={playerContainerRef} 
-          className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center group"
+          className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-black relative flex items-center justify-center group"
         >
           {streamUrl ? (
             (() => {
@@ -102,16 +102,16 @@ export default function WatchPage() {
         {streamUrl && (
           <button
             onClick={handleToggleFullscreen}
-            className="mt-4 bg-slate-900 hover:bg-red-600 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 uppercase tracking-wide text-xs border border-white/10"
+            className="mt-4 bg-yellow-300 hover:bg-red-600 text-black font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 uppercase tracking-wide text-xs border border-white/10"
           >
-            📺 Go Full Screen (Secured Mode)
+            📺 Go Full Screen Mode
           </button>
         )}
 
         {/* HELPFUL GUEST WATCH FOOTER TIP BAR */}
         <div className="w-full max-w-xl bg-slate-900/40 border border-white/5 p-4 rounded-xl text-center mt-6">
           <p className="text-xs text-blue-100 font-light leading-relaxed">
-            ✨ Streaming smoothly in High Definition. Use the 'Go Full Screen' button above for an immersive ad-free experience.
+            ✨ Streaming smoothly in High Definition. Use the 'Go Full Screen' button above for an immersive experience.
           </p>
         </div>
 
