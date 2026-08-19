@@ -60,13 +60,8 @@ export default function WatchPage() {
                onClick={(e) => e.stopPropagation()} 
           />
 
-          {/* 🔒 SECURITY OVERLAY BLOCK B: बॉटम-राइट कॉर्नर मास्क (प्लेयर के भीतर मौजूद 'Direct Download' बटन को ब्लॉक करने के लिए) */}
-          <div className="absolute bottom-0 right-0 w-[120px] h-[50px] bg-transparent z-40 pointer-events-auto cursor-default" 
-               onClick={(e) => e.stopPropagation()} 
-          />
-
           {/* 🔒 SECURITY OVERLAY BLOCK C: टॉप-लेफ्ट कॉर्नर मास्क (मेगा के लोगो और फ़ाइल नाम पर क्लिक रोकने के लिए) */}
-          <div className="absolute top-0 left-0 w-[70%] h-[60px] bg-transparent z-40 pointer-events-auto cursor-default" 
+          <div className="absolute top-0 left-0 w-[100%] h-[60px] bg-transparent z-40 pointer-events-auto cursor-default" 
                onClick={(e) => e.stopPropagation()} 
           />
 
