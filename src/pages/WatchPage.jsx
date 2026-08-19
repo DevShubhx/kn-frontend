@@ -44,27 +44,19 @@ export default function WatchPage() {
         <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
           {streamUrl ? (
             (() => {
-              // 🎯 ZERO MANIPULATION: पिक्सड्रैन के ऑफिशियल लिंक को सीधे क्लीन एम्बेड मोड में कन्वर्ट करना
-              let cleanEmbedUrl = streamUrl.trim();
+              // 🎯 FIXED HIGH ACCURACY: मेगा के सामान्य लिंक को 0ms में स्क्रीनशॉट वाले ऑफिशियल /embed/ फ़ॉर्मेट में बदलना
+              let cleanMegaEmbedUrl = streamUrl.trim();
 
-              // यदि डेटाबेस में पुराना /api/file/ वाला लिंक बचा हो, तो उसे भी ऑटो-हैंडल करना
-              if (cleanEmbedUrl.includes('/api/file/')) {
-                cleanEmbedUrl = cleanEmbedUrl.replace('/api/file/', '/u/');
-              }
-
-              // अंत में ऑफिशियल एम्बेड पैरामीटर जोड़ना ताकि पिक्सड्रैन का वेब लेआउट ब्लॉक न हो
-              if (!cleanEmbedUrl.includes('?embed')) {
-                cleanEmbedUrl = `${cleanEmbedUrl}?embed`;
+              if (cleanMegaEmbedUrl.includes('mega.nz/file/')) {
+                cleanMegaEmbedUrl = cleanMegaEmbedUrl.replace('mega.nz/file/', 'mega.nz/embed/');
               }
 
               return (
-                /* 🔒 SAFE EMBED GUARD: आईफ्रेम ही पिक्सड्रैन के /u/ वाले पूरे लिंक को वेबपेज समेत रेंडर कर सकता है 
-                   यह पुराना क्रैश होने वाला वीडियो टैग नहीं है, इसलिए ब्राउज़र इसे कभी ब्लॉक नहीं कर पाएगा! */
                 <iframe 
-                  src={cleanEmbedUrl}
+                  src={cleanMegaEmbedUrl}
                   title={`${showTitle} - Episode ${episodeNumber}`}
                   className="w-full h-full border-0 absolute inset-0 bg-black"
-                  allow="autoplay; fullscreen; picture-in-picture"
+                  allow="autoplay; fullscreen"
                   allowFullScreen
                   loading="lazy"
                 />
@@ -80,7 +72,7 @@ export default function WatchPage() {
         {/* HELPFUL GUEST WATCH FOOTER TIP BAR */}
         <div className="w-full max-w-xl bg-slate-900/40 border border-white/5 p-4 rounded-xl text-center">
           <p className="text-xs text-blue-100 font-light leading-relaxed">
-            ✨ Streaming smoothly in High Definition. If the video fails to buffer or loops endlessly, please double check your server connection loops or notify site admin handlers.
+            ✨ Streaming smoothly in High Definition via secure end-to-end encrypted Mega server nodes.
           </p>
         </div>
 
