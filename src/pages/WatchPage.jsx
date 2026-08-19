@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function WatchPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const playerContainerRef = useRef(null); // 🎯 वीडियो कंटेनर को ट्रैक करने के लिए हुक
 
   // 1. EXTRACT DATA PARAMETERS FROM URL STRINGS
   const showTitle = searchParams.get('show') || 'Cartoon Title';
@@ -11,8 +12,21 @@ export default function WatchPage() {
   const episodeTitle = searchParams.get('title') || 'Episode Track';
   const streamUrl = searchParams.get('stream') || '';
 
+  // 🎯 कस्टमाइज्ड फुल-स्क्रीन ट्रिगर: यह सुरक्षा परतों के साथ पूरे प्लेयर को फुल-स्क्रीन पर ले जाएगा!
+  const handleToggleFullscreen = () => {
+    if (!playerContainerRef.current) return;
+    
+    if (!document.fullscreenElement) {
+      playerContainerRef.current.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable fullscreen context: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   return (
-    <div className="w-full min-h-screen bg-[#6699cc] text-white font-eagle pb-16 flex flex-col items-center">
+    <div className="w-full min-h-screen bg-[#6699cc] text-white font-eagle pb-16 flex flex-col items-center select-none">
       
       {/* 🗺️ MINIMAL BRAND HEADER NAVBAR */}
       <header className="w-full bg-slate-900/80 backdrop-blur-md px-6 py-4 shadow-md flex justify-between items-center sticky top-0 z-50">
@@ -40,56 +54,64 @@ export default function WatchPage() {
           </h2>
         </div>
 
-        {/* 📺 INTERACTIVE MEDIA DISPLAY CANVAS (SECURED FOR AD-REVENUE) */}
-<div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8 group select-none">
-  {streamUrl ? (
-    (() => {
-      let cleanMegaEmbedUrl = streamUrl.trim();
+        {/* 🎬 मुख्य वीडियो कंटेनर (सुरक्षित फ्रेम) */}
+        <div 
+          ref={playerContainerRef} 
+          className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center group"
+        >
+          {streamUrl ? (
+            (() => {
+              let cleanMegaEmbedUrl = streamUrl.trim();
+              if (cleanMegaEmbedUrl.includes('mega.nz/file/')) {
+                cleanMegaEmbedUrl = cleanMegaEmbedUrl.replace('mega.nz/file/', 'mega.nz/embed/');
+              }
 
-      // ऑटो-कन्वर्टर: यदि मोंगोडीबी की streamUrl फ़ील्ड में मेगा का /file/ लिंक आता है, तो उसे /embed/ में बदलना
-      if (cleanMegaEmbedUrl.includes('mega.nz/file/')) {
-        cleanMegaEmbedUrl = cleanMegaEmbedUrl.replace('mega.nz/file/', 'mega.nz/embed/');
-      }
+              return (
+                <div className="w-full h-full relative">
+                  
+                  {/* 🔒 सुरक्षा परत A: टॉप-राइट कॉर्नर मास्क */}
+                  <div className="absolute top-0 right-0 w-40 h-16.25 bg-transparent z-40 pointer-events-auto cursor-default" 
+                       onClick={(e) => e.stopPropagation()} 
+                  />
 
-      return (
-        <div className="w-full h-full relative">
-          
-          {/* 🔒 SECURITY OVERLAY BLOCK A: टॉप-राइट कॉर्नर मास्क (मेगा के शेयर और क्लाउड लिंक्स को ब्लॉक करने के लिए) */}
-          <div className="absolute top-0 right-0 w-[150px] h-[60px] bg-transparent z-40 pointer-events-auto cursor-default" 
-               title="Streaming Secured" 
-               onClick={(e) => e.stopPropagation()} 
-          />
+                  {/* 🔒 TRAPPED OVERLAY C: टॉप-लेफ्ट कॉर्नर मास्क */}
+                  <div className="absolute top-0 left-0 w-full h-16.25 bg-transparent z-40 pointer-events-auto cursor-default" 
+                       onClick={(e) => e.stopPropagation()} 
+                  />
 
-          {/* 🔒 SECURITY OVERLAY BLOCK C: टॉप-लेफ्ट कॉर्नर मास्क (मेगा के लोगो और फ़ाइल नाम पर क्लिक रोकने के लिए) */}
-          <div className="absolute top-0 left-0 w-[100%] h-[60px] bg-transparent z-40 pointer-events-auto cursor-default" 
-               onClick={(e) => e.stopPropagation()} 
-          />
-
-          {/* 🎬 मुख्य मेगा एम्बेड आईफ्रेम */}
-          <iframe 
-            src={cleanMegaEmbedUrl}
-            title={`${showTitle} - Episode ${episodeNumber}`}
-            className="w-full h-full border-0 absolute inset-0 bg-black z-10"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            loading="lazy"
-          />
-          
+                  {/* मुख्य मेगा आईफ्रेम (🚨 महत्वपूर्ण: allowfullscreen को हटा दिया गया है ताकि मेगा का डिफ़ॉल्ट बटन लॉक हो जाए) */}
+                  <iframe 
+                    src={cleanMegaEmbedUrl}
+                    title={`${showTitle} - Episode ${episodeNumber}`}
+                    className="w-full h-full border-0 absolute inset-0 bg-black z-10"
+                    allow="autoplay"
+                    loading="lazy"
+                  />
+                  
+                </div>
+              );
+            })()
+          ) : (
+            <div className="text-center p-6 text-slate-500 italic text-sm">
+              ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
+            </div>
+          )}
         </div>
-      );
-    })()
-  ) : (
-    <div className="text-center p-6 text-slate-500 italic text-sm">
-      ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
-    </div>
-  )}
-</div>
 
+        {/* 📺 CUSTOM REVENUE-SECURED FULL SCREEN CONTROL BUTTON */}
+        {streamUrl && (
+          <button
+            onClick={handleToggleFullscreen}
+            className="mt-4 bg-slate-900 hover:bg-red-600 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2 uppercase tracking-wide text-xs border border-white/10"
+          >
+            📺 Go Full Screen (Secured Mode)
+          </button>
+        )}
 
         {/* HELPFUL GUEST WATCH FOOTER TIP BAR */}
-        <div className="w-full max-w-xl bg-slate-900/40 border border-white/5 p-4 rounded-xl text-center">
+        <div className="w-full max-w-xl bg-slate-900/40 border border-white/5 p-4 rounded-xl text-center mt-6">
           <p className="text-xs text-blue-100 font-light leading-relaxed">
-            ✨ Streaming smoothly in High Definition via secure end-to-end encrypted Mega server nodes.
+            ✨ Streaming smoothly in High Definition. Use the 'Go Full Screen' button above for an immersive ad-free experience.
           </p>
         </div>
 
