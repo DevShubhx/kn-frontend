@@ -44,9 +44,9 @@ export default function WatchPage() {
         <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
           {streamUrl ? (
             (() => {
-              // 🎯 FIXED HIGH ACCURACY: मेगा के सामान्य लिंक को 0ms में स्क्रीनशॉट वाले ऑफिशियल /embed/ फ़ॉर्मेट में बदलना
               let cleanMegaEmbedUrl = streamUrl.trim();
 
+              // 🎯 ऑटो-कन्वर्टर: यदि मोंगोडीबी की streamUrl फ़ील्ड में मेगा का /file/ लिंक आता है, तो उसे /embed/ में बदलना
               if (cleanMegaEmbedUrl.includes('mega.nz/file/')) {
                 cleanMegaEmbedUrl = cleanMegaEmbedUrl.replace('mega.nz/file/', 'mega.nz/embed/');
               }

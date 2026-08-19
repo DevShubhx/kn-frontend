@@ -60,7 +60,7 @@ export default function ShowPage() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
+                body: JSON.stringify({ 
                     text: userSavedWords,
                     username: savedUsername
                 })
@@ -160,14 +160,7 @@ export default function ShowPage() {
                                     {/* Watch Online Button - Open to All Guest Users */}
                                     {ep.streamUrl ? (
                                         <button
-                                            // 🎯 आपके ShowPage.jsx के 'Watch Online' बटन का कड़क और सही कोड:
-                                            onClick={() => {
-                                                // 🔒 सुरक्षा गार्ड: यदि डेटाबेस में लिंक न हो तो क्रैश होने से बचाना
-                                                const targetMegaLink = ep.downloadUrl || '';
-
-                                                navigate(`/watch?show=${encodeURIComponent(show.title)}&ep=${ep.episodeNumber || ''}&title=${encodeURIComponent(ep.title)}&stream=${encodeURIComponent(targetMegaLink)}`);
-                                            }}
-
+                                            onClick={() => navigate(`/watch?show=${encodeURIComponent(show.title)}&ep=${ep.episodeNumber || ''}&title=${encodeURIComponent(ep.title)}&stream=${encodeURIComponent(ep.streamUrl)}`)}
                                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-colors text-center shadow-md cursor-pointer"
                                         >
                                             📺 Watch Online
@@ -274,45 +267,45 @@ export default function ShowPage() {
                             </p>
                         ) : (
                             comments
-                                .filter(comment => comment.isApproved) // 🔒 Strictly hides unapproved guest posts
-                                .map((comment) => (
-                                    <div key={comment._id} className="w-full flex flex-col gap-3">
+                            .filter(comment => comment.isApproved) // 🔒 Strictly hides unapproved guest posts
+                            .map((comment) => (
+                                <div key={comment._id} className="w-full flex flex-col gap-3">
+                                    
+                                    {/* FIRST LAYER: Main User Comment Box Card */}
+                                    <div className="w-full bg-slate-900/60 border border-white/5 p-3.5 rounded-xl flex flex-col gap-1 shadow-md">
+                                        <div className="flex justify-between items-center mb-0.5">
+                                            <span className="text-xs font-bold text-red-400">@{comment.username}</span>
+                                            <span className="text-[9px] text-slate-400 font-medium">
+                                                {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : ''}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs sm:text-sm text-slate-200 leading-normal font-light">
+                                            {comment.text}
+                                        </p>
+                                    </div>
 
-                                        {/* FIRST LAYER: Main User Comment Box Card */}
-                                        <div className="w-full bg-slate-900/60 border border-white/5 p-3.5 rounded-xl flex flex-col gap-1 shadow-md">
+                                    {/* SECOND LAYER: Nested Administrator Response Threads Loops */}
+                                    {comment.replies && comment.replies.map((reply, rIdx) => (
+                                        <div 
+                                            key={reply._id || rIdx} 
+                                            className="w-11/12 ml-auto bg-slate-950/70 border border-red-900/30 p-3 rounded-xl flex flex-col gap-1 shadow-inner relative"
+                                        >
                                             <div className="flex justify-between items-center mb-0.5">
-                                                <span className="text-xs font-bold text-red-400">@{comment.username}</span>
-                                                <span className="text-[9px] text-slate-400 font-medium">
-                                                    {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : ''}
+                                                <span className="text-xs font-extrabold text-blue-400 tracking-wide flex items-center gap-1">
+                                                    {reply.username || 'Admin 🛡️'}
+                                                </span>
+                                                <span className="text-[9px] text-slate-500">
+                                                    {reply.createdAt ? new Date(reply.createdAt).toLocaleDateString() : ''}
                                                 </span>
                                             </div>
-                                            <p className="text-xs sm:text-sm text-slate-200 leading-normal font-light">
-                                                {comment.text}
+                                            <p className="text-xs text-zinc-300 leading-normal font-normal">
+                                                {reply.text}
                                             </p>
                                         </div>
+                                    ))}
 
-                                        {/* SECOND LAYER: Nested Administrator Response Threads Loops */}
-                                        {comment.replies && comment.replies.map((reply, rIdx) => (
-                                            <div
-                                                key={reply._id || rIdx}
-                                                className="w-11/12 ml-auto bg-slate-950/70 border border-red-900/30 p-3 rounded-xl flex flex-col gap-1 shadow-inner relative"
-                                            >
-                                                <div className="flex justify-between items-center mb-0.5">
-                                                    <span className="text-xs font-extrabold text-blue-400 tracking-wide flex items-center gap-1">
-                                                        {reply.username || 'Admin 🛡️'}
-                                                    </span>
-                                                    <span className="text-[9px] text-slate-500">
-                                                        {reply.createdAt ? new Date(reply.createdAt).toLocaleDateString() : ''}
-                                                    </span>
-                                                </div>
-                                                <p className="text-xs text-zinc-300 leading-normal font-normal">
-                                                    {reply.text}
-                                                </p>
-                                            </div>
-                                        ))}
-
-                                    </div>
-                                ))
+                                </div>
+                            ))
                         )}
                     </div>
                 </section>
