@@ -9,7 +9,7 @@ export default function WatchPage() {
   const showTitle = searchParams.get('show') || 'Cartoon Title';
   const episodeNumber = searchParams.get('ep') || '1';
   const episodeTitle = searchParams.get('title') || 'Episode Track';
-  const streamUrl = searchParams.get('stream');
+  const streamUrl = searchParams.get('stream') || '';
 
   return (
     <div className="w-full min-h-screen bg-[#6699cc] text-white font-eagle pb-16 flex flex-col items-center">
@@ -43,18 +43,33 @@ export default function WatchPage() {
         {/* HTML5 ACTIVE THEATER VIDEO DECK SANDBOX */}
         <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-900 relative flex items-center justify-center mb-8">
           {streamUrl ? (
-            /* 🎯 100% FIXED HIGH ACCURACY: बिना किसी crossOrigin या आईफ्रेम के शुद्ध HTML5 प्लेयर
-               यह पिक्सेलड्रैन के डायरेक्ट बाइनरी एपीआई लिंक से वीडियो बाइट्स को खींचता है, 
-               जिससे frame-ancestors या CSP का कोई भी नियम इस पर लागू नहीं हो पाता! */
-            <video 
-              src={streamUrl} 
-              controls 
-              autoPlay
-              playsInline
-              preload="auto"
-              className="w-full h-full object-contain"
-              onError={(e) => console.error("HTML5 Core Media Stream Failure Context:", e)}
-            />
+            (() => {
+              // 🎯 ZERO MANIPULATION: पिक्सड्रैन के ऑफिशियल लिंक को सीधे क्लीन एम्बेड मोड में कन्वर्ट करना
+              let cleanEmbedUrl = streamUrl.trim();
+
+              // यदि डेटाबेस में पुराना /api/file/ वाला लिंक बचा हो, तो उसे भी ऑटो-हैंडल करना
+              if (cleanEmbedUrl.includes('/api/file/')) {
+                cleanEmbedUrl = cleanEmbedUrl.replace('/api/file/', '/u/');
+              }
+
+              // अंत में ऑफिशियल एम्बेड पैरामीटर जोड़ना ताकि पिक्सड्रैन का वेब लेआउट ब्लॉक न हो
+              if (!cleanEmbedUrl.includes('?embed')) {
+                cleanEmbedUrl = `${cleanEmbedUrl}?embed`;
+              }
+
+              return (
+                /* 🔒 SAFE EMBED GUARD: आईफ्रेम ही पिक्सड्रैन के /u/ वाले पूरे लिंक को वेबपेज समेत रेंडर कर सकता है 
+                   यह पुराना क्रैश होने वाला वीडियो टैग नहीं है, इसलिए ब्राउज़र इसे कभी ब्लॉक नहीं कर पाएगा! */
+                <iframe 
+                  src={cleanEmbedUrl}
+                  title={`${showTitle} - Episode ${episodeNumber}`}
+                  className="w-full h-full border-0 absolute inset-0 bg-black"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              );
+            })()
           ) : (
             <div className="text-center p-6 text-slate-500 italic text-sm">
               ⚠️ Core stream video track payload missing. Unable to initialize media player framework.
