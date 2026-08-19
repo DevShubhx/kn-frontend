@@ -160,9 +160,12 @@ export default function ShowPage() {
                                     {/* Watch Online Button - Open to All Guest Users */}
                                     {ep.streamUrl ? (
                                         <button
-
+                                            // 🎯 आपके ShowPage.jsx के 'Watch Online' बटन का कड़क और सही कोड:
                                             onClick={() => {
-                                                navigate(`/watch?show=${encodeURIComponent(show.title)}&ep=${episode.episodeNumber}&title=${encodeURIComponent(episode.title)}&stream=${encodeURIComponent(episode.downloadUrl)}`);
+                                                // 🔒 सुरक्षा गार्ड: यदि डेटाबेस में लिंक न हो तो क्रैश होने से बचाना
+                                                const targetMegaLink = ep.downloadUrl || '';
+
+                                                navigate(`/watch?show=${encodeURIComponent(show.title)}&ep=${ep.episodeNumber || ''}&title=${encodeURIComponent(ep.title)}&stream=${encodeURIComponent(targetMegaLink)}`);
                                             }}
 
                                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-colors text-center shadow-md cursor-pointer"
