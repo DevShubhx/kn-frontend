@@ -240,7 +240,7 @@ export default function LiveTVPage() {
     if (!isFullscreen) return;
     setShowMobileClose(true);
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = setTimeout(() => setShowMobileClose(false), 3000);
+    closeTimerRef.current = setTimeout(() => setShowMobileClose(false), 5000);
   };
 
   const handleSendMessage = (e) => {
@@ -585,7 +585,7 @@ useEffect(() => {
                       }
 
                       setIsMuted(false);
-                      setTimeout(() => setIsStrippingActive(false), 3000);
+                      setTimeout(() => setIsStrippingActive(false), 5000);
                     }}
                     onTouchEnd={(e) => {
                       e.stopPropagation();
@@ -598,7 +598,7 @@ useEffect(() => {
                         else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
                       }
                       setIsMuted(false);
-                      setTimeout(() => setIsStrippingActive(false), 3000);
+                      setTimeout(() => setIsStrippingActive(false), 5000);
                     }}
                   >
                     <button
