@@ -309,10 +309,10 @@ export default function LiveTVPage() {
           ) {
             console.log("Kick Live Core Sync: Live frame broadcasting started!");
 
-            // लाइव शुरू होते ही ठीक 3 सेकंड बाद पट्टियाँ गायब हो जाएंगी
+            // लाइव शुरू होते ही ठीक 5 सेकंड बाद पट्टियाँ गायब हो जाएंगी
             setTimeout(() => {
               setIsStrippingActive(false);
-            }, 5000);
+            }, 6000);
           }
         } catch (err) {
           // कैच ब्लॉक सुरक्षा गार्ड
@@ -383,10 +383,10 @@ export default function LiveTVPage() {
       clearTimeout(minimizeTimerRef.current);
     }
 
-    // ठीक 3 सेकंड (3000ms) बाद बटन को ऑटो-हाइड कर देना
+    // ठीक 5 सेकंड (5000ms) बाद बटन को ऑटो-हाइड कर देना
     minimizeTimerRef.current = setTimeout(() => {
       setShowMinimizeBtn(false);
-    }, 3000);
+    }, 5000);
   };
 
 
