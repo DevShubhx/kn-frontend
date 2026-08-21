@@ -150,37 +150,7 @@ export default function LiveTVPage() {
       return;
     }
 
-    // 📡 KICK POSTMESSAGE EVENT LISTENER: बफ़रिंग ख़त्म होने और लाइव फ़्रेम प्ले होने का ट्रैकर
-    useEffect(() => {
-      const handleKickLiveState = (event) => {
-        // सुरक्षा गार्ड: केवल वैलिड किक प्लेयर्स के ओरिजिन को सुनना
-        if (!event.origin.includes('kick.com')) return;
-
-        try {
-          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-
-          // 🎯 पहली लाइव फ़्रेम प्ले होते ही या बफ़रिंग ख़त्म होते ही इवेंट पकड़ना
-          if (
-            (data.event === 'player_state_changed' && data.params?.state === 'playing') ||
-            data.event === 'play' || data.type === 'playing'
-          ) {
-            console.log("Kick Live Core Sync: Live frame broadcasting started!");
-
-            // लाइव शुरू होते ही ठीक 3 सेकंड बाद पट्टियाँ गायब हो जाएंगी
-            setTimeout(() => {
-              setIsStrippingActive(false);
-            }, 3000);
-          }
-        } catch (err) {
-          // कैच ब्लॉक सुरक्षा गार्ड
-        }
-      };
-
-      window.addEventListener('message', handleKickLiveState);
-      return () => window.removeEventListener('message', handleKickLiveState);
-    }, []);
-
-
+  
     const liveTimer = setInterval(() => {
       // 🎯 FIXED HIGH ACCURACY: Render क्लाउड सर्वर और Vercel के बीच के 5:30 घंटे के टाइमज़ोन गैप को जड़ से खत्म करना
       const localNow = new Date();
@@ -322,6 +292,37 @@ export default function LiveTVPage() {
       height: actualHeight
     });
   }, []);
+
+   // 📡 KICK POSTMESSAGE EVENT LISTENER: बफ़रिंग ख़त्म होने और लाइव फ़्रेम प्ले होने का ट्रैकर
+    useEffect(() => {
+      const handleKickLiveState = (event) => {
+        // सुरक्षा गार्ड: केवल वैलिड किक प्लेयर्स के ओरिजिन को सुनना
+        if (!event.origin.includes('kick.com')) return;
+
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+          // 🎯 पहली लाइव फ़्रेम प्ले होते ही या बफ़रिंग ख़त्म होते ही इवेंट पकड़ना
+          if (
+            (data.event === 'player_state_changed' && data.params?.state === 'playing') ||
+            data.event === 'play' || data.type === 'playing'
+          ) {
+            console.log("Kick Live Core Sync: Live frame broadcasting started!");
+
+            // लाइव शुरू होते ही ठीक 3 सेकंड बाद पट्टियाँ गायब हो जाएंगी
+            setTimeout(() => {
+              setIsStrippingActive(false);
+            }, 3000);
+          }
+        } catch (err) {
+          // कैच ब्लॉक सुरक्षा गार्ड
+        }
+      };
+
+      window.addEventListener('message', handleKickLiveState);
+      return () => window.removeEventListener('message', handleKickLiveState);
+    }, []);
+
 
   useEffect(() => {
     const video = videoRef.current;
