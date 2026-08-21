@@ -23,9 +23,16 @@ export default function LiveTVPage() {
   const [loading, setLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMobileClose, setShowMobileClose] = useState(false);
+  // 🎯 रेवेन्यू सुरक्षा स्टेट: डिफ़ॉल्ट रूप से TRUE (बफ़रिंग के दौरान स्ट्रिप्स दिखेंगी)
+  const [isStrippingActive, setIsStrippingActive] = useState(true);
+
 
   // 🔊 लाइव स्ट्रीम के लिए डायनेमिक म्यूट/अनम्यूट स्टेट मैनेजमेंट
   const [isMuted, setIsMuted] = useState(true);
+  // 🎯 मिनिमाइज़ बटन की विज़िबिलिटी स्टेट (शुरुआत में फ़ुलस्क्रीन होते ही यह TRUE रहेगी)
+  const [showMinimizeBtn, setShowMinimizeBtn] = useState(false);
+  const minimizeTimerRef = useRef(null); // टाइमर को ट्रैक करने के लिए हुक
+
 
   // चैट, स्क्रीनबग और एडमिन एनालिटिक्स स्टेट्स
   const [chatMessages, setChatMessages] = useState([]);
@@ -135,66 +142,97 @@ export default function LiveTVPage() {
   }, []);
 
   // ⏱️ स्यूडो-लाइव इंजन + ऑफ़-एयर काउंटडाउन + 15 मिनट प्री-शो चैट एक्टिवेशन (TARGETED PRODUCTION PATCH)
-useEffect(() => {
-  if (schedule.length === 0) {
-    setCurrentVideo(null);
-    setTimeLeft('OFF-AIR');
-    setIsChatActiveEarly(false);
-    return;
-  }
-
-  const liveTimer = setInterval(() => {
-    // 🎯 FIXED HIGH ACCURACY: Render क्लाउड सर्वर और Vercel के बीच के 5:30 घंटे के टाइमज़ोन गैप को जड़ से खत्म करना
-    const localNow = new Date();
-    // ब्राउज़र की लोकल घड़ी से उसका टाइमज़ोन ऑफ़सेट (मिनटों में) निकालकर उसे सीधे एब्सोल्यूट UTC मिलिसेकंड में लॉक करना
-    const utcNowMs = localNow.getTime() + (localNow.getTimezoneOffset() * 60000);
-    
-    // 🔒 IST EMBED MATRIX: भारत का मानक समय UTC से कड़ाई से 5 घंटे 30 मिनट आगे (+5.5 * 3,600,000 ms) है
-    // यह 'correctedNowMs' अब दुनिया के किसी भी कोने, वीपीएन या सर्वर पर हो, हमेशा कड़ाई से शुद्ध भारतीय मानक समय के अनुसार ही टिक करेगा
-    const correctedNowMs = utcNowMs + (5.5 * 3600000) + serverClientOffset;
-
-    let targetShow = null;
-    const nextUpcomingShow = schedule.find(s => new Date(s.liveStartTime).getTime() > correctedNowMs);
-
-    for (let i = 0; i < schedule.length; i++) {
-      const show = schedule[i];
-      const startTimeMs = new Date(show.liveStartTime).getTime();
-      const endTimeMs = startTimeMs + (show.durationInSeconds * 1000);
-
-      if (correctedNowMs >= startTimeMs && correctedNowMs < endTimeMs) {
-        targetShow = show;
-        break;
-      }
-    }
-
-    if (!targetShow && nextUpcomingShow) {
-      const diffMs = new Date(nextUpcomingShow.liveStartTime).getTime() - correctedNowMs;
-
-      if (diffMs <= 15 * 60 * 1000) {
-        setIsChatActiveEarly(true);
-      } else {
-        setIsChatActiveEarly(false);
-      }
-
-      const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
-      const mins = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-      const secs = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
-      setTimeLeft(`${hours}:${mins}:${secs}`);
-    } else {
-      setTimeLeft('');
-      if (targetShow) setIsChatActiveEarly(true);
-    }
-
-    if (targetShow) {
-      // Kick.com Live Integration: Stream URL allocation is handled by custom iframe injection engine
-      setCurrentVideo(targetShow);
-    } else {
+  useEffect(() => {
+    if (schedule.length === 0) {
       setCurrentVideo(null);
+      setTimeLeft('OFF-AIR');
+      setIsChatActiveEarly(false);
+      return;
     }
-  }, CONFIG.POLL_INTERVAL_MS);
 
-  return () => clearInterval(liveTimer);
-}, [schedule, serverClientOffset]);
+    // 📡 KICK POSTMESSAGE EVENT LISTENER: बफ़रिंग ख़त्म होने और लाइव फ़्रेम प्ले होने का ट्रैकर
+    useEffect(() => {
+      const handleKickLiveState = (event) => {
+        // सुरक्षा गार्ड: केवल वैलिड किक प्लेयर्स के ओरिजिन को सुनना
+        if (!event.origin.includes('kick.com')) return;
+
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+          // 🎯 पहली लाइव फ़्रेम प्ले होते ही या बफ़रिंग ख़त्म होते ही इवेंट पकड़ना
+          if (
+            (data.event === 'player_state_changed' && data.params?.state === 'playing') ||
+            data.event === 'play' || data.type === 'playing'
+          ) {
+            console.log("Kick Live Core Sync: Live frame broadcasting started!");
+
+            // लाइव शुरू होते ही ठीक 3 सेकंड बाद पट्टियाँ गायब हो जाएंगी
+            setTimeout(() => {
+              setIsStrippingActive(false);
+            }, 3000);
+          }
+        } catch (err) {
+          // कैच ब्लॉक सुरक्षा गार्ड
+        }
+      };
+
+      window.addEventListener('message', handleKickLiveState);
+      return () => window.removeEventListener('message', handleKickLiveState);
+    }, []);
+
+
+    const liveTimer = setInterval(() => {
+      // 🎯 FIXED HIGH ACCURACY: Render क्लाउड सर्वर और Vercel के बीच के 5:30 घंटे के टाइमज़ोन गैप को जड़ से खत्म करना
+      const localNow = new Date();
+      // ब्राउज़र की लोकल घड़ी से उसका टाइमज़ोन ऑफ़सेट (मिनटों में) निकालकर उसे सीधे एब्सोल्यूट UTC मिलिसेकंड में लॉक करना
+      const utcNowMs = localNow.getTime() + (localNow.getTimezoneOffset() * 60000);
+
+      // 🔒 IST EMBED MATRIX: भारत का मानक समय UTC से कड़ाई से 5 घंटे 30 मिनट आगे (+5.5 * 3,600,000 ms) है
+      // यह 'correctedNowMs' अब दुनिया के किसी भी कोने, वीपीएन या सर्वर पर हो, हमेशा कड़ाई से शुद्ध भारतीय मानक समय के अनुसार ही टिक करेगा
+      const correctedNowMs = utcNowMs + (5.5 * 3600000) + serverClientOffset;
+
+      let targetShow = null;
+      const nextUpcomingShow = schedule.find(s => new Date(s.liveStartTime).getTime() > correctedNowMs);
+
+      for (let i = 0; i < schedule.length; i++) {
+        const show = schedule[i];
+        const startTimeMs = new Date(show.liveStartTime).getTime();
+        const endTimeMs = startTimeMs + (show.durationInSeconds * 1000);
+
+        if (correctedNowMs >= startTimeMs && correctedNowMs < endTimeMs) {
+          targetShow = show;
+          break;
+        }
+      }
+
+      if (!targetShow && nextUpcomingShow) {
+        const diffMs = new Date(nextUpcomingShow.liveStartTime).getTime() - correctedNowMs;
+
+        if (diffMs <= 15 * 60 * 1000) {
+          setIsChatActiveEarly(true);
+        } else {
+          setIsChatActiveEarly(false);
+        }
+
+        const hours = String(Math.floor(diffMs / (1000 * 60 * 60))).padStart(2, '0');
+        const mins = String(Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        const secs = String(Math.floor((diffMs % (1000 * 60)) / 1000)).padStart(2, '0');
+        setTimeLeft(`${hours}:${mins}:${secs}`);
+      } else {
+        setTimeLeft('');
+        if (targetShow) setIsChatActiveEarly(true);
+      }
+
+      if (targetShow) {
+        // Kick.com Live Integration: Stream URL allocation is handled by custom iframe injection engine
+        setCurrentVideo(targetShow);
+      } else {
+        setCurrentVideo(null);
+      }
+    }, CONFIG.POLL_INTERVAL_MS);
+
+    return () => clearInterval(liveTimer);
+  }, [schedule, serverClientOffset]);
 
 
   // 🎛️ मास्टर स्क्रीनबग पोलिंग लेयर (Engineered with Cache-Buster & Anti-Cache Policy)
@@ -335,16 +373,32 @@ useEffect(() => {
     };
   }, []); // Locked to Mount Cycle Only
 
+  // ⏱️ 3-सेकंड ऑटो-हाइड कंट्रोलर: फुलस्क्रीन में स्क्रीन छूने पर बटन जगाना और 3 सेकंड बाद छुपाना
+  const triggerMinimizeButtonTimeout = () => {
+    setShowMinimizeBtn(true);
+
+    // यदि पहले से कोई टाइमर चल रहा हो तो उसे क्लियर करना
+    if (minimizeTimerRef.current) {
+      clearTimeout(minimizeTimerRef.current);
+    }
+
+    // ठीक 3 सेकंड (3000ms) बाद बटन को ऑटो-हाइड कर देना
+    minimizeTimerRef.current = setTimeout(() => {
+      setShowMinimizeBtn(false);
+    }, 3000);
+  };
+
+
 
   return (
     <div style={{ textAlign: 'center', backgroundColor: '#111', color: '#fff', padding: '30px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
-      
-      <button
-          onClick={() => navigate('/')}
-          className="bg-[#2629367e] mr-75 mb-4 hover:bg-zinc-700 text-white py-2 px-2 md:px-6 md:mr-255 rounded transition-colors"
-        > ⬅ Back</button>
 
-      
+      <button
+        onClick={() => navigate('/')}
+        className="bg-[#2629367e] mr-75 mb-4 hover:bg-zinc-700 text-white py-2 px-2 md:px-6 md:mr-255 rounded transition-colors"
+      > ⬅ Back</button>
+
+
       <h1 style={{ letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>📺 CARTOON NETWORK LIVE TV</h1>
 
       {loading ? (
@@ -367,155 +421,198 @@ useEffect(() => {
             </div>
           )}
 
-       {/* वीडियो होल्डर बॉक्स - एक्टिव रेशियो के अनुसार ऑटो-लॉक रहेगा (100% मोबाइल और टच-सिंक्ड) */}
-<div style={{ width: '100%', maxWidth: '850px', margin: '0 auto', backgroundColor: '#000', boxShadow: '0px 0px 30px rgba(0,0,0,0.8)', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
-  <div
-    ref={fullScreenContainerRef}
-    onClick={(e) => {
-      if (!isFullscreen) e.stopPropagation();
-      else handleScreenTouch();
-    }}
-    style={isFullscreen ? {
-      position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-      backgroundColor: '#000', zIndex: 2147483646, display: 'flex',
-      alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
-    } : {
-      position: 'relative', width: '100%', height: 'auto', backgroundColor: '#000',
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }}
-  >
-    {/* इनर रैपर: एस्पेक्ट रेशियो को बांधने का फिक्स */}
-    <div style={{
-      position: 'relative', width: isFullscreen ? 'auto' : '100%',
-      height: isFullscreen ? '100%' : 'auto', maxWidth: '100vw', maxHeight: '100vh',
-      aspectRatio: isFullscreen ? 'unset' : '16/9', margin: '0 auto',
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }}>
+          {/* वीडियो होल्डर बॉक्स - एक्टिव रेशियो के अनुसार ऑटो-लॉक रहेगा (100% मोबाइल और टच-सिंक्ड) */}
+          <div style={{ width: '100%', maxWidth: '850px', margin: '0 auto', backgroundColor: '#000', boxShadow: '0px 0px 30px rgba(0,0,0,0.8)', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
+            <div
+              ref={fullScreenContainerRef}
+              onClick={(e) => {
+                if (!isFullscreen) {
+                  e.stopPropagation();
+                } else {
+                  // 🎯 जादू की लाइन: फ़ुलस्क्रीन मोड में कहीं भी क्लिक करने पर 3-सेकंड का टाइमर एक्टिवेट होगा
+                  triggerMinimizeButtonTimeout();
 
-      {/* 🔒 PERMANENT CLICK SHIELD: यह किक बटन्स को हमेशा के लिए पूरी तरह ब्लॉक रखेगा */}
-      <div 
-        style={{
-          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-          zIndex: 2147483630, background: 'transparent', cursor: 'default',
-          touchAction: 'none',
-          pointerEvents: 'auto'
-        }}
-        onClick={(e) => { 
-          e.stopPropagation(); 
-          e.preventDefault(); 
-          if (isFullscreen) handleScreenTouch(); 
-        }}
-        onTouchStart={(e) => { 
-          e.stopPropagation(); 
-          if (isFullscreen) handleScreenTouch(); 
-        }} 
-      />
+                  // यदि आपकी फ़ाइल में पुराना handleScreenTouch() फ़ंक्शन भी बना हुआ है, तो उसे यहाँ नीचे ऐसे ही रहने दें:
+                  if (typeof handleScreenTouch === 'function') handleScreenTouch();
+                }
+              }}
+              onTouchEnd={(e) => {
+                // 📱 मोबाइल यूज़र्स के लिए: स्क्रीन पर अंगूठा टच करते ही बटन 3 सेकंड के लिए जागेगा
+                if (isFullscreen) {
+                  triggerMinimizeButtonTimeout();
+                }
+              }}
+              style={isFullscreen ? {
+                position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                backgroundColor: '#000', zIndex: 2147483646, display: 'flex',
+                alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+              } : {
+                position: 'relative', width: '100%', height: 'auto', backgroundColor: '#000',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}
+            >
 
-      {/* 📺 शुद्ध ऑफिशियल एम्बेड आईफ्रेम (पेस्ट करने के बाद सारे डैश हटा लें) */}
-      <iframe
-        ref={videoRef}
-       src={`https://player.kick.com/kn-network?autoplay=true&muted=${isMuted}&allowfullscreen=false`}
-         title="Network Master Live Stream"
-        frameBorder="0"
-        scrolling="no"
-        /* 🎯 CRITICAL SECURITY LOCK: किक के खुद के फुलस्क्रीन बटन को अंदर से हमेशा के लिए कुचलने (Disable) का फिक्स */
-        allowFullScreen={false} 
-        allow="autoplay; encrypted-media"
-        style={{
-          width: isFullscreen ? 'auto' : '100%',
-          height: isFullscreen ? '100%' : 'auto',
-          maxHeight: '100vh',
-          aspectRatio: '16/9',
-          display: 'block',
-          pointerEvents: 'auto',
-          objectFit: 'contain'
-        }}
-      />
+              {/* इनर रैपर: एस्पेक्ट रेशियो को बांधने का फिक्स */}
+              <div style={{
+                position: 'relative', width: isFullscreen ? 'auto' : '100%',
+                height: isFullscreen ? '100%' : 'auto', maxWidth: '100vw', maxHeight: '100vh',
+                aspectRatio: isFullscreen ? 'unset' : '16/9', margin: '0 auto',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
 
-      {/* 🔇🔍 जादुई मर्ज इंजन (The Synced Native Fullscreen & Unmute Engine) */}
-      {isMuted && !isFullscreen && (
-        <div
-          style={{ 
-            position: 'absolute', bottom: '20px', right: '20px', 
-            zIndex: 2147483645, pointerEvents: 'auto' 
-          }}
-          onClick={(e) => { 
-            e.stopPropagation(); 
-            e.preventDefault();
-            
-            // 🎯 STEP 1: ब्राउज़र के सुरक्षा गार्ड को चकमा देने के लिए सीधे नेटिव डोम एलिमेंट को फुलस्क्रीन पर धकेलना
-            const element = fullScreenContainerRef.current;
-            if (element) {
-              if (element.requestFullscreen) element.requestFullscreen();
-              else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen(); // सफारी बैकअप
-              else if (element.msRequestFullscreen) element.msRequestFullscreen(); // एज बैकअप
-            }
-            
-            // 🎯 STEP 2: फुलस्क्रीन ट्रिगर होने के तुरंत बाद आवाज़ खोलना ताकि सिंक्रोनाइजेशन न टूटे
-            setIsMuted(false); 
-          }}
-          onTouchEnd={(e) => { 
-            e.stopPropagation(); 
-            e.preventDefault();
-            const element = fullScreenContainerRef.current;
-            if (element) {
-              if (element.requestFullscreen) element.requestFullscreen();
-              else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
-            }
-            setIsMuted(false);
-          }} 
-        >
-          <button
-            style={{ 
-              padding: '12px 24px', fontSize: '12px', fontWeight: 'bold', color: '#000', 
-              backgroundColor: '#53fc18', border: '2px solid #ffffff', borderRadius: '6px', 
-              textTransform: 'uppercase', letterSpacing: '1px', cursor: 'pointer', 
-              boxShadow: '0px 4px 20px rgba(83, 252, 24, 0.6)' 
-            }}
-          >
-            🔊 चलाएं और बड़ी स्क्रीन करें (Unmute & Maximize)
-          </button>
+                {/* 🔒 PERMANENT CLICK SHIELD: यह किक बटन्स को हमेशा के लिए पूरी तरह ब्लॉक रखेगा */}
+                <div
+                  style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    zIndex: 2147483630, background: 'transparent', cursor: 'default',
+                    touchAction: 'none',
+                    pointerEvents: 'auto'
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (isFullscreen) handleScreenTouch();
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    if (isFullscreen) handleScreenTouch();
+                  }}
+                />
+
+                {/* 📺 शुद्ध ऑफिशियल एम्बेड आईफ्रेम (पेस्ट करने के बाद सारे डैश हटा लें) */}
+                <iframe
+                  ref={videoRef}
+                  src={`https://player.kick.com/kn-network?autoplay=true&muted=${isMuted}&allowfullscreen=false`}
+                  title="Network Master Live Stream"
+                  frameBorder="0"
+                  scrolling="no"
+                  /* 🎯 CRITICAL SECURITY LOCK: किक के खुद के फुलस्क्रीन बटन को अंदर से हमेशा के लिए कुचलने (Disable) का फिक्स */
+                  allowFullScreen={false}
+                  allow="autoplay; encrypted-media"
+                  style={{
+                    width: isFullscreen ? 'auto' : '100%',
+                    height: isFullscreen ? '100%' : 'auto',
+                    maxHeight: '100vh',
+                    aspectRatio: '16/9',
+                    display: 'block',
+                    pointerEvents: 'auto',
+                    objectFit: 'contain'
+                  }}
+                />
+
+                {/* 🔒 सुरक्षा पट्टी A: टॉप मास्क (किक लोगो, स्ट्रीम टाइटल और शेयर लिंक्स को ब्लॉक करने के लिए) */}
+                <div
+                  style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '65px',
+                    backgroundColor: '#000000', zIndex: 2147483640, transition: 'opacity 500ms',
+                    opacity: isStrippingActive ? 1 : 0,
+                    pointerEvents: isStrippingActive ? 'auto' : 'none'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                />
+
+                {/* 🔒 सुरक्षा पट्टी B: बॉटम मास्क (किक वॉटरमार्क, लाइव व्यूअर्स काउंट और सेटिंग्स गियर को ब्लॉक करने के लिए) */}
+                <div
+                  style={{
+                    position: 'absolute', bottom: 0, left: 0, width: '100%', height: '55px',
+                    backgroundColor: '#000000', zIndex: 2147483640, transition: 'opacity 500ms',
+                    opacity: isStrippingActive ? 1 : 0,
+                    pointerEvents: isStrippingActive ? 'auto' : 'none'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                />
+
+                {/* 🗗 SMART MINIMIZE BUTTON: फुलस्क्रीन मोड में स्क्रीन छूने पर केवल 3 सेकंड के लिए चमकेगा और फिर ऑटो-हाइड होगा */}
+                {isFullscreen && showMinimizeBtn && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      if (document.exitFullscreen) document.exitFullscreen();
+                      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                    }}
+                    style={{
+                      position: 'absolute',
+                      top: '20px',
+                      right: '20px',
+                      zIndex: 2147483648,
+                      backgroundColor: 'rgba(0, 0, 0, 0.85)', // हाई विज़िबिलिटी ब्लैक बैकग्राउंड
+                      backdropFilter: 'blur(5px)',
+                      color: '#ffffff',
+                      border: '2px solid rgba(255,255,255,0.9)',
+                      padding: '10px 18px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                      cursor: 'pointer',
+                      pointerEvents: 'auto',
+                      transition: 'opacity 300ms ease-in-out'
+                    }}
+                  >
+                    🗗 Minimize Screen
+                  </button>
+                )}
+
+                {/* 🔇🔍 जादुई मर्ज इंजन (The Synced Native Fullscreen & Unmute Engine) */}
+                {isMuted && !isFullscreen && (
+                  <div
+                    style={{
+                      position: 'absolute', bottom: '20px', right: '20px',
+                      zIndex: 2147483645, pointerEvents: 'auto'
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+
+                      setIsStrippingActive(true);
+
+                      // फुलस्क्रीन होते ही तुरंत मिनिमाइज बटन को 3 सेकंड के लिए स्क्रीन पर चमकाना
+                      triggerMinimizeButtonTimeout();
+
+                      const element = fullScreenContainerRef.current;
+                      if (element) {
+                        if (element.requestFullscreen) element.requestFullscreen();
+                        else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
+                        else if (element.msRequestFullscreen) element.msRequestFullscreen();
+                      }
+
+                      setIsMuted(false);
+                      setTimeout(() => setIsStrippingActive(false), 3000);
+                    }}
+                    onTouchEnd={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setIsStrippingActive(true);
+                      triggerMinimizeButtonTimeout();
+                      const element = fullScreenContainerRef.current;
+                      if (element) {
+                        if (element.requestFullscreen) element.requestFullscreen();
+                        else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
+                      }
+                      setIsMuted(false);
+                      setTimeout(() => setIsStrippingActive(false), 3000);
+                    }}
+                  >
+                    <button
+                      style={{
+                        padding: '12px 24px', fontSize: '12px', fontWeight: 'bold', color: '#000',
+                        backgroundColor: '#53fc18', border: '2px solid #ffffff', borderRadius: '6px',
+                        textTransform: 'uppercase', letterSpacing: '1px', cursor: 'pointer',
+                        boxShadow: '0px 4px 20px rgba(83, 252, 24, 0.6)'
+                      }}
+                    >
+                      🔊 चलाएं और बड़ी स्क्रीन करें (Unmute & Maximize)
+                    </button>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          </div>
+
         </div>
-      )}
-
-      {/* 🗗 MINIMIZE BUTTON: फुलस्क्रीन मोड में स्क्रीन छूने पर केवल 3 सेकंड के लिए चमकेगा */}
-      {isFullscreen && showMobileClose && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            // 🎯 नेटिव फुलस्क्रीन से बाहर आने का अचूक सिंक
-            if (document.exitFullscreen) document.exitFullscreen();
-            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-          }}
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            zIndex: 2147483648, 
-            backgroundColor: 'rgba(255, 255, 255, 0.25)',
-            backdropFilter: 'blur(5px)',
-            color: '#ffffff',
-            border: '1px solid rgba(255,255,255,0.4)',
-            padding: '8px 14px',
-            borderRadius: '4px',
-            fontSize: '11px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            cursor: 'pointer',
-            pointerEvents: 'auto'
-          }}
-        >
-          🗗 Minimize Screen
-        </button>
-      )}
-
-    </div>
-  </div>
-</div>
-
-</div>
 
       ) : (
         /* 🎯 ऑफ़-एयर काउंटडाउन टाइमर बॉक्स */
