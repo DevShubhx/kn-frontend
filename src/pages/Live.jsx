@@ -504,8 +504,8 @@ export default function LiveTVPage() {
                 {/* 🔒 सुरक्षा पट्टी A: टॉप मास्क (किक लोगो, स्ट्रीम टाइटल और शेयर लिंक्स को ब्लॉक करने के लिए) */}
                 <div
                   style={{
-                    position: 'absolute', top: 0, left: 0, width: '100%', height: '68px',
-                    backgroundColor: '#000000', zIndex: 2147483640, transition: 'opacity 500ms',
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '75px',
+                    backgroundColor: '#ffffff', zIndex: 2147483640, transition: 'opacity 500ms',
                     opacity: isStrippingActive ? 1 : 0,
                     pointerEvents: isStrippingActive ? 'auto' : 'none'
                   }}
@@ -515,8 +515,8 @@ export default function LiveTVPage() {
                 {/* 🔒 सुरक्षा पट्टी B: बॉटम मास्क (किक वॉटरमार्क, लाइव व्यूअर्स काउंट और सेटिंग्स गियर को ब्लॉक करने के लिए) */}
                 <div
                   style={{
-                    position: 'absolute', bottom: 0, left: 0, width: '100%', height: '68px',
-                    backgroundColor: '#000000', zIndex: 2147483640, transition: 'opacity 500ms',
+                    position: 'absolute', bottom: 0, left: 0, width: '100%', height: '75px',
+                    backgroundColor: '#ffffff', zIndex: 2147483640, transition: 'opacity 500ms',
                     opacity: isStrippingActive ? 1 : 0,
                     pointerEvents: isStrippingActive ? 'auto' : 'none'
                   }}
