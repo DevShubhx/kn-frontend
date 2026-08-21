@@ -510,7 +510,7 @@ useEffect(() => {
                 <div
                   style={{
                     position: 'absolute', top: 0, left: 0, width: '100%', height: '75px',
-                    backgroundColor: '#ffffff', zIndex: 2147483640, transition: 'opacity 500ms',
+                    backgroundColor: '#000000', zIndex: 2147483640, transition: 'opacity 500ms',
                     opacity: isStrippingActive ? 1 : 0,
                     pointerEvents: isStrippingActive ? 'auto' : 'none'
                   }}
@@ -521,7 +521,7 @@ useEffect(() => {
                 <div
                   style={{
                     position: 'absolute', bottom: 0, left: 0, width: '100%', height: '75px',
-                    backgroundColor: '#ffffff', zIndex: 2147483640, transition: 'opacity 500ms',
+                    backgroundColor: '#000000', zIndex: 2147483640, transition: 'opacity 500ms',
                     opacity: isStrippingActive ? 1 : 0,
                     pointerEvents: isStrippingActive ? 'auto' : 'none'
                   }}
