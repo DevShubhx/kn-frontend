@@ -29,8 +29,7 @@ export default function LiveTVPage() {
 
   // 🔊 लाइव स्ट्रीम के लिए डायनेमिक म्यूट/अनम्यूट स्टेट मैनेजमेंट
   const [isMuted, setIsMuted] = useState(true);
-  // 🎯 मिनिमाइज़ बटन की विज़िबिलिटी स्टेट (शुरुआत में फ़ुलस्क्रीन होते ही यह TRUE रहेगी)
-  const [showMinimizeBtn, setShowMinimizeBtn] = useState(false);
+  
   const minimizeTimerRef = useRef(null); // टाइमर को ट्रैक करने के लिए हुक
 
 
@@ -219,8 +218,7 @@ export default function LiveTVPage() {
 
   useEffect(() => { if (chatEndRef.current) chatEndRef.current.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
 
-  const bug1 = bugSettings.find(b => b.bugId === 'SCREENBUG-1') || { isVisible: true, liveImage: 'cn_screenbug.png' };
-  const bug2 = bugSettings.find(b => b.bugId === 'SCREENBUG-2') || { isVisible: true, liveImage: 'toonami-logo.png' };
+ 
 
   // 🎯 मास्टर फिक्स: वीडियो के वास्तविक दिखने वाले फ्रेम की सटीक Position और 4:3 Aspect Ratio ट्रैक करने के लिए
   const [videoRect, setVideoRect] = useState({ top: 0, left: 0, width: 0, height: 0 });
@@ -308,41 +306,6 @@ useEffect(() => {
     };
   }, [isFullscreen, currentVideo, updateActualVideoCoordinates]);
 
-
-  // 🎛️ मास्टर स्क्रीनबग पोलिंग लेयर (Race-Condition Free Recursive Engine)
-  useEffect(() => {
-    let isMounted = true;
-    let timerId = null;
-
-    const pollBugSettingsSafely = async () => {
-      if (!isMounted) return;
-      try {
-        const res = await fetch(`${CONFIG.BACKEND_BASE_URL}/api/screen-bugs/live-settings?_=${Date.now()}`);
-        if (res.ok && isMounted) {
-          const data = await res.json();
-          if (Array.isArray(data)) setBugSettings(data);
-        }
-      } catch (err) {
-        console.error("📋 Defensive Bug Poll Intercepted:", err.message);
-      } finally {
-        // 🎯 CRITICAL FIX 2: पोलिंग टाइमर को बढ़ाकर 5 सेकंड (5000ms) किया गया है
-        // यह केवल और केवल तभी अगली सिंगल रिक्वेस्ट भेजेगा जब सर्वर पुरानी रिक्वेस्ट प्रोसेस कर चुका होगा
-        if (isMounted) {
-          timerId = setTimeout(pollBugSettingsSafely, 5000);
-        }
-      }
-    };
-
-    pollBugSettingsSafely();
-
-    // ❌ जादुई क्लीनअप: री-रेंडर होते ही पुराने पेंडिंग लूप को पूरी तरह नष्ट (Kill) कर देगा
-    return () => {
-      isMounted = false;
-      if (timerId) {
-        clearTimeout(timerId);
-      }
-    };
-  }, []); // Locked to Mount Cycle Only
 
   // ⏱️ 3-सेकंड ऑटो-हाइड कंट्रोलर: फुलस्क्रीन में स्क्रीन छूने पर बटन जगाना और 3 सेकंड बाद छुपाना
   const triggerMinimizeButtonTimeout = () => {
