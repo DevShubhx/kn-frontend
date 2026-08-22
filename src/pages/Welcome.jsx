@@ -305,7 +305,7 @@ function Welcome() {
                     </div>
                 </div>
                 {/* 🖼️ 2. CENTER PILLAR: 🌟 पुराने बैनर और टेक्स्ट की जगह नया एनिमेटेड इमेज स्लाइडिंग कैरोसेल */}
-                <div className="w-full flex flex-col justify-center items-center text-center mx-auto z-10 max-w-xl md:max-w-180 px-2">
+                <div className="w-full flex flex-col justify-center items-center text-center mx-auto z-10 max-w-xl md:max-w-190 px-2">
 
                     {/* 🔝 TOP CONTROL BAR (B1 to B5 Buttons) */}
                     <div className="w-auto flex justify-between items-center bg-slate-900 border border-blue-900 rounded-xl p-2 shadow-lg mb-1">
@@ -316,7 +316,7 @@ function Welcome() {
                                 <button
                                     key={index}
                                     onClick={() => setCarouselIndex(index)}
-                                    className={`text-xs px-3 py-1.5 font-black rounded-md tracking-wider transition-all duration-300 border ${carouselIndex === index
+                                    className={`text-xs px-1 py-1.5 font-black rounded-md tracking-wider transition-all duration-300 border ${carouselIndex === index
                                         ? 'bg-red-600 border-red-500 text-white shadow-md shadow-red-900/50 scale-120'
                                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
                                         }`}
@@ -328,7 +328,7 @@ function Welcome() {
                     </div>
 
                     {/* 🎞️ SLIDING VIEWPORT (इल्यूजन बॉक्स जो राइट-टू-लेफ्ट खिसकेगा) */}
-                    <div className="w-full aspect-video md:w-175 md:h-100 mx-auto rounded-xl overflow-hidden relative">
+                   <div className="w-[96vw] aspect-video md:w-175 md:h-100 rounded-xl overflow-hidden relative">
                         <div
                             className="flex w-full h-full transition-transform duration-500 ease-out"
                             style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
@@ -348,20 +348,13 @@ function Welcome() {
                                         className="w-full h-full object-cover transition-transform duration-1000 pointer-events-none"
                                         loading="lazy"
                                     />
-
-                                    {/* विंटेज स्टूडियो टाइटल ओवरले (यदि आपके लेआउट में एम्बेडेड है) */}
-                                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/20 to-transparent p-4 flex items-end justify-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <h2 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide drop-shadow-[2px_2px_0px_#000]">
-                                            {card.title}
-                                        </h2>
-                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                     <button
                         onClick={() => navigate('/catalog')}
-                        className="py-3 px-8 sm:py-4 sm:px-12 font-eagle font-bold text-base sm:text-lg text-white bg-red-600 rounded-full shadow-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-orange-500 active:scale-95 mt-1"
+                        className="py-3 px-8 sm:py-4 sm:px-12 font-eagle font-bold text-base sm:text-lg text-white bg-red-600 rounded-full shadow-md cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-orange-500 active:scale-95 mt-1"
                     >
                         Browse Shows
                     </button>
