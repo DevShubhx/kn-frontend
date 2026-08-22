@@ -43,10 +43,6 @@ export default function LiveTVPage() {
   const [liveWatchers, setLiveWatchers] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const [bugSettings, setBugSettings] = useState([
-    { bugId: 'SCREENBUG-1', isVisible: true, liveImage: 'cn_screenbug.png' },
-    { bugId: 'SCREENBUG-2', isVisible: true, liveImage: 'toonami-logo.png' }
-  ]);
 
   // 🎯 सुरक्षा गार्ड: यदि कोई बिना लॉगिन किए सीधे यूआरएल टाइप करके आए
   useEffect(() => {
@@ -204,37 +200,6 @@ export default function LiveTVPage() {
     return () => clearInterval(liveTimer);
   }, [schedule, serverClientOffset]);
 
-
-  // 🎛️ मास्टर स्क्रीनबग पोलिंग लेयर (Engineered with Cache-Buster & Anti-Cache Policy)
-  useEffect(() => {
-    let isMounted = true;
-    let timerId = null;
-
-    const pollBugSettingsSafely = async () => {
-      try {
-        // 🎯 CRITICAL FIX: यूआरएल के अंत में डायनेमिक टाइमस्टैम्प (?_=${Date.now()}) जोड़ा गया है
-        // यह ब्राउज़र को 304 Cache को बाईपास करके सीधे सर्वर से 200 OK लाने पर मजबूर करेगा
-        const res = await fetch(`${CONFIG.BACKEND_BASE_URL}/api/screen-bugs/live-settings?_=${Date.now()}`);
-        if (res.ok && isMounted) {
-          const data = await res.json();
-          if (Array.isArray(data)) setBugSettings(data);
-        }
-      } catch (err) {
-        console.error("📋 Defensive Bug Poll Intercepted:", err.message);
-      } finally {
-        if (isMounted) {
-          timerId = setTimeout(pollBugSettingsSafely, 3000);
-        }
-      }
-    };
-
-    pollBugSettingsSafely();
-
-    return () => {
-      isMounted = false;
-      if (timerId) clearTimeout(timerId);
-    };
-  }, []);
 
   const handleScreenTouch = () => {
     if (!isFullscreen) return;
@@ -528,38 +493,6 @@ useEffect(() => {
                   onClick={(e) => e.stopPropagation()}
                 />
 
-                {/* 🗗 SMART MINIMIZE BUTTON: फुलस्क्रीन मोड में स्क्रीन छूने पर केवल 3 सेकंड के लिए चमकेगा और फिर ऑटो-हाइड होगा */}
-                {isFullscreen && showMinimizeBtn && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      if (document.exitFullscreen) document.exitFullscreen();
-                      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                    }}
-                    style={{
-                      position: 'absolute',
-                      top: '20px',
-                      right: '20px',
-                      zIndex: 2147483648,
-                      backgroundColor: 'rgba(0, 0, 0, 0.85)', // हाई विज़िबिलिटी ब्लैक बैकग्राउंड
-                      backdropFilter: 'blur(5px)',
-                      color: '#ffffff',
-                      border: '2px solid rgba(255,255,255,0.9)',
-                      padding: '10px 18px',
-                      borderRadius: '6px',
-                      fontSize: '12px',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px',
-                      cursor: 'pointer',
-                      pointerEvents: 'auto',
-                      transition: 'opacity 300ms ease-in-out'
-                    }}
-                  >
-                    🗗 Minimize Screen
-                  </button>
-                )}
 
                 {/* 🔇🔍 जादुई मर्ज इंजन (The Synced Native Fullscreen & Unmute Engine) */}
                 {isMuted && !isFullscreen && (
@@ -609,7 +542,7 @@ useEffect(() => {
                         boxShadow: '0px 4px 20px rgba(83, 252, 24, 0.6)'
                       }}
                     >
-                      🔊 चलाएं और बड़ी स्क्रीन करें (Unmute & Maximize)
+                      Unmute🔊 और स्क्रीन Maximize ⛶ करें
                     </button>
                   </div>
                 )}

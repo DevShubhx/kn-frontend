@@ -17,6 +17,21 @@ export default function ShowPage() {
     const [commentError, setCommentError] = useState('');
     const [successFeedback, setSuccessFeedback] = useState(null); // 🌟 Tracks words for user's submitted banner notification
 
+    // 🎯 आपके ShowPage.jsx के अंदर जहां भी डेटा सेट होता है, वहां इसे सिंक करें:
+useEffect(() => {
+  if (show && show.title) {
+    // 1. बिना वीडियो क्वालिटी के शुद्ध टाइटल गूगल सर्च के लिए सेट करना
+    document.title = `${show.title} Hindi Dubbed Episodes Download — KartoonNetwork`;
+
+    // 2. इस शो के लिए विशिष्ट विवरण अपडेट करना
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', `Watch and Download ${show.title} Hindi Dubbed Full Episodes online in premium high definition stream nodes layout.`);
+    }
+  }
+}, [show]); // मोंगोडीबी से डेटा लोड होते ही यह ट्रिगर हो जाएगा
+
+
     useEffect(() => {
         // 1. Verify authorization user log state parameter metrics
         const token = localStorage.getItem('token');

@@ -789,11 +789,6 @@ export default function AdminDashboard() {
 
       </main>
 
-      <div className="admin-container">
-        <AdminScreenBugControl />
-      </div>
-
-
       <div className="w-full max-w-5xl px-4 mt-8">
         <AdminUpdatesManager />
       </div>
